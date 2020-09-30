@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kangec.wecome.infrastructure.mapper.UserMapper">
+    <select id="selectUserByUserId" resultType="User">
+        SELECT *
+        FROM USER
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="queryUserPassword" resultType="java.lang.String">
+        SELECT password
+        FROM USER
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="queryUserContacts" resultType="User">
+        SELECT password
+        FROM USER
+        WHERE user_id != #{userId}
+        AND (nick_name LIKE #{key} OR user_id LIKE #{key});
+    </select>
+</mapper>
