@@ -1,4 +1,4 @@
-package com.kangec.client.handler;
+package com.kangec.client.socket.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

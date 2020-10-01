@@ -1,7 +1,7 @@
-package com.kangec.client.server;
+package com.kangec.client.socket;
 
 import com.kangec.client.cache.Beans;
-import com.kangec.client.handler.WeComeChannelInit;
+import com.kangec.client.service.UIService;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -22,11 +22,16 @@ import java.util.concurrent.Callable;
  * @Version 1.0
  **/
 @Slf4j
-public class WeComeNettyClient implements Callable<ChannelFuture> {
+public class WeComeNettyClient implements Callable<Channel> {
 
     private String DEFAULT_HOST = "127.0.0.1";
     private int DEFAULT_PORT = 9946;
     private Channel channel = null;
+    private UIService uiService;
+
+    public WeComeNettyClient(UIService uiService) {
+        this.uiService = uiService;
+    }
 
     public void setHostName(String hostName, int port) {
         DEFAULT_HOST = hostName;
@@ -40,23 +45,22 @@ public class WeComeNettyClient implements Callable<ChannelFuture> {
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
     @Override
-    public ChannelFuture call() throws Exception {
+    public Channel call() throws Exception {
         return run();
     }
 
-    private ChannelFuture run() {
+    private Channel run() {
         ChannelFuture future = null;
         try {
             Bootstrap client = new Bootstrap();
             client.group(workerGroup)
                     .channel(NioSocketChannel.class)
                     .option(ChannelOption.AUTO_READ, true)
-                    .handler(new WeComeChannelInit());
-            future = client.connect(DEFAULT_HOST, DEFAULT_PORT).sync();
-            future = future.channel().closeFuture().sync();
+                    .handler(new ClientChannelInit(uiService));
+            future = client.connect(DEFAULT_HOST, DEFAULT_PORT).syncUninterruptibly();
             this.channel = future.channel();
             Beans.addBean(Beans.CLIENT_CHANNEL,channel);
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (future != null && future.isSuccess()) {
@@ -64,9 +68,11 @@ public class WeComeNettyClient implements Callable<ChannelFuture> {
             }else {
                 log.info("客户端连接服务器失败。");
             }
-            workerGroup.shutdownGracefully();
         }
+        return channel;
+    }
 
-        return future;
+    public void destroy(){
+        workerGroup.shutdownGracefully();
     }
 }

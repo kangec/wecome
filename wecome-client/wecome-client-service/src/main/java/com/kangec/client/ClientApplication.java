@@ -1,19 +1,51 @@
 package com.kangec.client;
 
 import com.kangec.client.service.UIService;
-import com.kangec.contract.LoginContract;
-import com.kangec.contract.MainContract;
-import com.kangec.ui.ChatUI;
-import com.kangec.ui.ContactsUI;
-import com.kangec.ui.LoginUI;
-import com.kangec.ui.MainUI;
+import com.kangec.client.socket.WeComeNettyClient;
+import com.kangec.client.ui.contract.LoginContract;
+import com.kangec.client.ui.ui.LoginUI;
+import io.netty.channel.Channel;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
 
 @Slf4j
-public class ClientApplication {
+public class ClientApplication extends Application{
 
+    private static ExecutorService executorService = Executors.newFixedThreadPool(2);
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        LoginContract.View login = new LoginUI();
+        login.doShow();
+
+        LoginContract.Presenter loginPresenter = login.getPresenter();
+        UIService uiService = new UIService();
+        uiService.setLoginPresenter(loginPresenter);
+
+        // 2. 启动socket连接
+        log.info("NettyClient连接服务开始 inetHost：{} inetPort：{}", "127.0.0.1", 9946);
+        WeComeNettyClient nettyClient = new WeComeNettyClient(uiService);
+        Future<Channel> future = executorService.submit(nettyClient);
+        Channel channel = future.get();
+        if (null == channel) throw new RuntimeException("netty client start error channel is null");
+
+        while (!nettyClient.isActive()) {
+            log.info("NettyClient启动服务 ...");
+            Thread.sleep(500);
+        }
+        log.info("NettyClient连接服务完成 {}", channel.localAddress());
+    }
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
