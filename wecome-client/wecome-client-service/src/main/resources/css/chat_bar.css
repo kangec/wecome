@@ -1,0 +1,107 @@
+@import "chat_bar/group_bar_chat.css";
+@import "group_bar_friend/group_bar_friend.css";
+
+
+#chat{
+    -fx-background-radius: 4px;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-border-color: rgb(180,180,180);
+    -fx-background-color: white;
+}
+
+
+/* 控制栏 */
+.bar{
+   -fx-background-color: #28282c;
+   -fx-background-radius: 4px 0px 0px 4px;
+}
+
+.bar_avatar,.bar_avatar:hover,.bar_avatar:pressed{
+    -fx-background-radius: 2px;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 50px 50px;
+    -fx-background-color: white;
+    -fx-background-image: url("/icon/01_50.png");
+    -fx-cursor: hand;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-border-color: white;
+}
+
+.bar_chats{
+    -fx-background-radius: 2px;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 30px 30px;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/icon/chat/chat_selected.png");
+    -fx-cursor: hand;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-border-color: transparent;
+}
+
+.bar_contacts{
+    -fx-background-radius: 2px;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 30px 30px;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/icon/contact/contact.png");
+    -fx-cursor: hand;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-border-color: transparent;
+}
+
+.bar_contacts:hover{
+    -fx-background-image: url("/icon/contact/contact_click.png");
+}
+
+.bar_contacts:pressed{
+    -fx-background-image: url("/icon/contact/contact_selected.png");
+}
+
+.bar_location{
+        -fx-background-radius: 2px;
+        -fx-background-position: center center;
+        -fx-background-repeat: no-repeat;
+        -fx-background-size: 30px 30px;
+        -fx-background-color: transparent;
+        -fx-background-image: url("/icon/file/file.png");
+        -fx-cursor: hand;
+        -fx-border-width: 1px;
+        -fx-border-radius: 2px;
+        -fx-border-color: transparent;
+}
+
+.bar_location:hover{
+    -fx-background-image: url("/icon/file/file_click.png");
+}
+
+.bar_location:pressed{
+    -fx-background-image: url("/icon/file/file_selected.png");
+}
+
+.bar_setting{
+        -fx-background-radius: 2px;
+        -fx-background-position: center center;
+        -fx-background-repeat: no-repeat;
+        -fx-background-size: 20px 20px;
+        -fx-background-color: transparent;
+        -fx-background-image: url("/icon/setting/setting.png");
+        -fx-cursor: hand;
+        -fx-border-width: 1px;
+        -fx-border-radius: 2px;
+        -fx-border-color: transparent;
+}
+
+.bar_setting:hover{
+    -fx-background-image: url("/icon/setting/setting_click.png");
+}
+
+.bar_setting:pressed{
+    -fx-background-image: url("/icon/setting/setting_selected.png");
+}
