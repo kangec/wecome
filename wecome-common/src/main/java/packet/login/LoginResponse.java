@@ -1,9 +1,6 @@
 package packet.login;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import packet.Command;
 import packet.Packet;
 import packet.login.dto.ChatItemDTO;
@@ -28,6 +25,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class LoginResponse extends Packet {
     private String userId;                    // 用户标识
     private String avatar;                    // 用户头像

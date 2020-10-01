@@ -1,6 +1,7 @@
 package com.kangec.wecome.service;
 
 import com.kangec.wecome.infrastructure.mapper.UserMapper;
+import com.kangec.wecome.infrastructure.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,11 @@ public class UserServiceImpl implements UserService{
     public boolean checkAuth(String userId, String password) {
         String userPassword = userMapper.queryUserPassword(userId);
         return userPassword.equals(password);
+    }
+
+    @Override
+    public User queryUserInfo(String userId) {
+        return userMapper.selectUserByUserId(userId);
     }
 
 

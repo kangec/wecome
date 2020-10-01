@@ -9,6 +9,7 @@ public class User {
     private long id;
     private String userId;
     private String nickName;
+    private String avatar;
     private String password;
     private Date createTime;
     private Date updateTime;
