@@ -6,6 +6,7 @@ import com.kangec.client.ui.contract.LoginContract;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import packet.login.LoginRequest;
+import packet.login.LoginResponse;
 
 
 @Slf4j
@@ -40,8 +41,13 @@ public class LoginPresenter implements LoginContract.Presenter {
     }
 
     @Override
-    public void loginSuccess() {
-        loginUI.onLoginSuccess();
+    public void loginSuccess(LoginResponse msg) {
+        loginUI.onLoginSuccess(msg);
+    }
+
+    @Override
+    public void loginFail() {
+        loginUI.onLoginFailed();
     }
 
     //

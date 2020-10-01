@@ -1,5 +1,7 @@
 package com.kangec.client.ui.contract;
 
+import packet.login.LoginResponse;
+
 /**
  * @Author Ardien
  * @Date 9/22/2020 8:43 PM
@@ -10,7 +12,9 @@ public interface LoginContract {
     interface Presenter {
         public void login(String username, String password);
 
-        void loginSuccess();
+        void loginSuccess(LoginResponse msg);
+
+        void loginFail();
     }
 
     interface View {
@@ -27,8 +31,9 @@ public interface LoginContract {
 
         /**
          * 登陆成功；跳转聊天窗口
+         * @param msg
          */
-        void onLoginSuccess();
+        void onLoginSuccess(LoginResponse msg);
 
         /**
          * 登录失败：弹窗提示用户

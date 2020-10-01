@@ -20,6 +20,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean checkAuth(String userId, String password) {
         String userPassword = userMapper.queryUserPassword(userId);
+        if (userPassword == null || password.isEmpty()) return false;
         return userPassword.equals(password);
     }
 

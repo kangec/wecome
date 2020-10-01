@@ -1,8 +1,11 @@
 package com.kangec.wecome.socket;
 
+import codec.ObjDecoder;
+import codec.ObjEncoder;
 import com.kangec.wecome.service.UserService;
 import com.kangec.wecome.socket.hander.LoginHandler;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,7 +24,11 @@ public class WeComeChannelInitializer extends ChannelInitializer<SocketChannel> 
 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
-        ch.pipeline()
-                .addLast(new LoginHandler(userService));
+        ChannelPipeline pipeline = ch.pipeline();
+        pipeline.addLast(new ObjDecoder());
+
+        pipeline.addLast(new LoginHandler(userService));
+
+        pipeline.addLast(new ObjEncoder());
     }
 }

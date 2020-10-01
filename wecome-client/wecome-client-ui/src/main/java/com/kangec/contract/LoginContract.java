@@ -16,6 +16,7 @@ public interface LoginContract {
         void doShow();
         void onUserNameError();
         void onPasswordError();
+        LoginContract.Presenter getPresenter();
 
         /**
          * 登录事件

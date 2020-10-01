@@ -31,10 +31,8 @@ public class ChatUI extends UIBinding implements ChatContract.View {
 
     public ChatUI(Pane chatsPane,String userId, String userNickName, String userHead) {
         super.root = chatsPane;
-        this.userId = userId;
-        this.userNickName = userNickName;
-        this.userHead = userHead;
         initView();
+        setCurrUser(userId, userNickName, userHead);
         super.move();
     }
 
@@ -93,6 +91,13 @@ public class ChatUI extends UIBinding implements ChatContract.View {
     @Override
     public void doShow() {
         super.show();
+    }
+
+    @Override
+    public void setCurrUser(String userId, String nickName, String avatar) {
+        this.userId = userId;
+        this.userNickName = nickName;
+        this.userHead = avatar;
     }
 
     @Override

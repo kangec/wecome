@@ -1,6 +1,8 @@
 package com.kangec.client.ui.presenter;
 
+import com.kangec.client.cache.Beans;
 import com.kangec.client.ui.contract.MainContract;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -24,5 +26,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void doQuitChat() {
         log.info("系统退出");
+        Channel channel = Beans.getBean(Beans.CLIENT_CHANNEL, Channel.class);
+        channel.close();
     }
 }

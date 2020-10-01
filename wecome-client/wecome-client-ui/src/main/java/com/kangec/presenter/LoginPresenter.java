@@ -1,11 +1,9 @@
 package com.kangec.presenter;
 
-import com.kangec.client.cache.Beans;
 import com.kangec.common.StringUtils;
 import com.kangec.contract.LoginContract;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
-import packet.login.LoginRequest;
 
 /**
  * @Author Ardien
@@ -47,9 +45,9 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     //
     private boolean doLogin(String username, String password) {
-        Channel channel = Beans.getBean(Beans.CLIENT_CHANNEL, Channel.class);
-        LoginRequest loginRequest = new LoginRequest(username,password);
-        channel.writeAndFlush(loginRequest);
+        //Channel channel = Beans.getBean(Beans.CLIENT_CHANNEL, Channel.class);
+        //LoginRequest loginRequest = new LoginRequest(username,password);
+        //channel.writeAndFlush(loginRequest);
         return false;
     }
 }

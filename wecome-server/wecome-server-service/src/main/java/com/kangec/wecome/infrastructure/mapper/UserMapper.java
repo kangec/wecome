@@ -4,6 +4,7 @@ import com.kangec.wecome.infrastructure.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * @Email ardien@126.com
  * @Version 1.0
  **/
-
+@Component
 @Mapper
 public interface UserMapper {
 

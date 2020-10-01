@@ -8,12 +8,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import packet.login.LoginResponse;
 
 import java.io.IOException;
 
@@ -40,11 +42,6 @@ public class LoginUI extends UIBinding implements LoginContract.View {
     public LoginUI() {
         initView();
     }
-
-    public void setMainView(MainContract.View mainView) {
-        this.mainView = mainView;
-    }
-
     @Override
     public void initView() {
         try {
@@ -106,10 +103,12 @@ public class LoginUI extends UIBinding implements LoginContract.View {
 
     /**
      * 登陆成功；跳转聊天窗口
+     * @param msg
      */
     @Override
-    public void onLoginSuccess() {
+    public void onLoginSuccess(LoginResponse msg) {
         this.close();
+        mainView.setUserInfo(msg.getUserId(), msg.getNickName(), msg.getAvatar());
         mainView.doShow();
     }
 
@@ -118,6 +117,10 @@ public class LoginUI extends UIBinding implements LoginContract.View {
      */
     @Override
     public void onLoginFailed() {
-
+        Alert loginFail = new Alert(Alert.AlertType.INFORMATION);
+        loginFail.setTitle("Login WeCome");
+        loginFail.setHeaderText("登录失败");
+        loginFail.setContentText("请检查用户名和密码");
+        loginFail.showAndWait();
     }
 }

@@ -89,6 +89,11 @@ public class LoginUI extends UIBinding implements LoginContract.View {
 
     }
 
+    @Override
+    public LoginContract.Presenter getPresenter() {
+        return loginPresenter;
+    }
+
     /**
      * 登录事件
      *

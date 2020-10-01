@@ -37,6 +37,8 @@ public interface ChatContract {
     interface View {
         void doShow();
 
+        void setCurrUser(String userId, String nickName, String avatar);
+
         /**
          * 填充对话框消息-好友[别人的消息]
          *

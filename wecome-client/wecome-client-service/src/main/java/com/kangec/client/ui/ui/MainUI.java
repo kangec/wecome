@@ -110,7 +110,7 @@ public class MainUI extends UIBinding implements MainContract.View {
         minBtn.setOnAction(event -> setIconified(true));
         closeBtn.setOnAction(event -> {
             close();
-            log.info("客户端退出");
+            mainPresenter.doQuitChat();
             System.exit(0);
         });
 
@@ -130,6 +130,7 @@ public class MainUI extends UIBinding implements MainContract.View {
         this.userId = userId;
         this.userNickName = userNickName;
         this.userHead = userHead;
+        if (chatUI != null) chatUI.setCurrUser(userId, userNickName, userHead);
         avatarBtn.setStyle(String.format("-fx-background-image: url('/icon/avatar/%s.jpg')", userHead));
     }
 

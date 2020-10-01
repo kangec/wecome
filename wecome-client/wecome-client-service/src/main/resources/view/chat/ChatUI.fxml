@@ -50,7 +50,7 @@
         <Pane layoutX="314.0" layoutY="30.0" prefHeight="770.0" prefWidth="850.0">
             <Pane id="information" prefHeight="620.0" prefWidth="850.0">
                 <Pane id="info_pane" nodeOrientation="LEFT_TO_RIGHT" prefHeight="44" prefWidth="1.0">
-                    <Label id="info_name" layoutX="40" layoutY="-8" prefHeight="45" prefWidth="400" text="小傅哥 | bugstack.cn" />
+                    <Label id="info_name" layoutX="40" layoutY="-8" prefHeight="45" prefWidth="400" />
                 </Pane>
                 <Pane id="info_pane_box" layoutX="3.0" layoutY="44.0" prefHeight="572.0" prefWidth="844.0" style="-fx-background-color:transparent;-fx-border-width:0;" />
                 <Button id="tool_face" layoutY="580.0" prefHeight="40" prefWidth="40">

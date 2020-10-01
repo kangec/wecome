@@ -19,17 +19,20 @@ public class LoginHandler extends SimpleChannelInboundHandler<LoginResponse> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginResponse msg) throws Exception {
+        LoginContract.Presenter loginPresenter = uiService.getLoginPresenter();
         log.info(JSON.toJSONString(msg));
-        if (!msg.isIdSuccess()) log.info("登录失败，检查账号密码");
-        log.info("登录成功");
-        Platform.runLater(()->{
-            LoginContract.Presenter loginPresenter = uiService.getLoginPresenter();
-            loginPresenter.loginSuccess();
-        });
+        if (msg.isIdSuccess()) {
+            log.info("登录成功");
+            Platform.runLater(()->loginPresenter.loginSuccess(msg));
+        } else {
+            log.info("登录失败，检查账号密码");
+            Platform.runLater(loginPresenter::loginFail);
+        }
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        super.exceptionCaught(ctx, cause);
+        ctx.close();
+        log.info(cause.getMessage());
     }
 }
