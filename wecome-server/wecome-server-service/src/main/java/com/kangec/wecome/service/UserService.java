@@ -1,6 +1,7 @@
 package com.kangec.wecome.service;
 
 import com.kangec.wecome.infrastructure.pojo.User;
+import packet.login.dto.ChatItemDTO;
 
 
 import java.util.List;
@@ -30,4 +31,11 @@ public interface UserService {
      * @return GroupIdList
      */
     List<String> getGroupIds(String userId);
+
+    /**
+     * 查询 userId 下的对话框列表
+     * @param userId userId
+     * @return ChatItemDTO列表
+     */
+    List<ChatItemDTO> getChatListDTD(String userId);
 }

@@ -1,6 +1,8 @@
 package com.kangec.wecome.infrastructure.mapper;
 
+import com.kangec.wecome.infrastructure.pojo.Chat;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -11,6 +13,8 @@ import java.util.List;
  * @Version 1.0
  **/
 
+@Component
 @Mapper
 public interface ChatsMapper {
+    List<Chat> queryChats();
 }
