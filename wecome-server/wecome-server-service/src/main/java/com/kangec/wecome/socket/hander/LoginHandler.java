@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import packet.login.LoginRequest;
 import packet.login.LoginResponse;
 
+import java.util.List;
+
 /**
  * 服务端登录处理器
  **/
@@ -39,11 +41,23 @@ public class LoginHandler extends BaseHandler<LoginRequest> {
             return;
         }
 
-        // TODO 查询数据
-        User user = userService.queryUserInfo(userId);
+        /* 登录成功后，需要完成：给客户端反馈用户信息、用户对话框列表、通讯录列表、群组列表 */
+
+        // 将 userId 绑定 Channel，发送消息时将通过此拿到传输消息的 Channel
+        ChannelBeansCache.put(userId,ctx);
+
+        // 将 GroupId 与 Channel 绑定，用于收发消息。
+        List<String> groupIds = userService.getGroupIds(userId);
+        groupIds.forEach(groupId -> ChannelBeansCache.putGroups(groupId, ctx));
+
+        // 1. 获取反馈用户信息
+        User user = userService.getUserInfo(userId);
+
+        // 2.用户的对话框列表
+
         // TODO 初始化传输数据对象
         // 添加到管道缓存中
-        ChannelBeansCache.put(userId,ctx);
+
 
         // 返回登录信息
         LoginResponse acceptLogin = LoginResponse.builder()

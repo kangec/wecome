@@ -21,5 +21,13 @@ public interface UserService {
      * @param userId userId
      * @return {@link User}
      */
-    User queryUserInfo(String userId);
+    User getUserInfo(String userId);
+
+
+    /**
+     * 查找 userId 下的群组列表Id
+     * @param userId userId
+     * @return GroupIdList
+     */
+    List<String> getGroupIds(String userId);
 }
