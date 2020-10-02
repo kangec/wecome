@@ -16,7 +16,7 @@ public class Chat {
      * 数据校验，0好友，1群组
      */
     @Pattern(regexp = "[0-1]")
-    private Integer chatType;
+    private int chatType;
     private Date createTime;
     private Date updateTime;
 }

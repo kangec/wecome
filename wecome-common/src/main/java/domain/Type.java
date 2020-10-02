@@ -3,6 +3,6 @@ package domain;
 /**
  * 消息类型
  **/
-public enum MsgType {
+public enum Type {
     PERSONAL,GROUP
 }

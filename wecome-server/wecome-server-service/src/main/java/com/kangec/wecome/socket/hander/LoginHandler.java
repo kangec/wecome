@@ -2,6 +2,7 @@ package com.kangec.wecome.socket.hander;
 
 import com.alibaba.fastjson.JSON;
 import com.kangec.wecome.config.ChannelBeansCache;
+import com.kangec.wecome.infrastructure.pojo.Chat;
 import com.kangec.wecome.infrastructure.pojo.User;
 import com.kangec.wecome.service.UserService;
 import com.kangec.wecome.socket.BaseHandler;
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Component;
 import packet.login.LoginRequest;
 import packet.login.LoginResponse;
 import packet.login.dto.ChatItemDTO;
+import packet.login.dto.ContactItemDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,8 +58,11 @@ public class LoginHandler extends BaseHandler<LoginRequest> {
         User user = userService.getUserInfo(userId);
 
         // 2.用户的对话框列表
-        List<ChatItemDTO> chatList = userService.getChatListDTD(userId);
+        List<Chat> chatList = userService.getChats(userId);
 
+
+        // 3. 通讯录列表
+        List<ContactItemDTO> contactList = userService.getContactList(user.getUserId());
 
         // TODO 初始化传输数据对象
         // 添加到管道缓存中
@@ -68,8 +74,8 @@ public class LoginHandler extends BaseHandler<LoginRequest> {
                 .userId(user.getUserId())
                 .avatar(user.getAvatar())
                 .nickName(user.getNickName())
-                .chatList(chatList)
-                .contactList(null)
+                .chatList(null)
+                .contactList(contactList)
                 .groupList(null)
                 .build();
         log.info("用户登录成功，状态返回： {}", JSON.toJSONString(acceptLogin));
@@ -78,9 +84,6 @@ public class LoginHandler extends BaseHandler<LoginRequest> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        ctx.close();
         log.error(cause.getMessage());
     }
-
-
 }

@@ -32,9 +32,9 @@ public class LoginResponse extends Packet {
     private String nickName;                  // 昵称
     private boolean idSuccess;                // 是否登录成功
 
-    private List<ChatItemDTO> chatList = new ArrayList<ChatItemDTO>();          // 对话列表
-    private List<GroupItemDTO> groupList = new ArrayList<GroupItemDTO>();       // 群组列表
-    private List<ContactItemDTO> contactList = new ArrayList<ContactItemDTO>(); // 联系人列表
+    private List<ChatItemDTO> chatList;         // 对话列表
+    private List<GroupItemDTO> groupList;       // 群组列表
+    private List<ContactItemDTO> contactList; // 联系人列表
 
     /**
      * 获取指令
