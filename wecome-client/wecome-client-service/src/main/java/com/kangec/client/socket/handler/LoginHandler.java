@@ -1,32 +1,41 @@
 package com.kangec.client.socket.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.kangec.client.service.UIService;
-import com.kangec.client.ui.contract.LoginContract;
+import com.kangec.client.cache.Beans;
+
+import com.kangec.client.view.contract.LoginContract;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
+import packet.login.LoginRequest;
 import packet.login.LoginResponse;
+import packet.login.dto.ContactItemDTO;
+
+import java.util.List;
 
 @Slf4j
 public class LoginHandler extends SimpleChannelInboundHandler<LoginResponse> {
-    private UIService uiService;
+    private LoginContract.View view;
 
-    public LoginHandler(UIService uiService) {
-        this.uiService = uiService;
+    public LoginHandler(LoginContract.View view) {
+        this.view = view;
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginResponse msg) throws Exception {
-        LoginContract.Presenter loginPresenter = uiService.getLoginPresenter();
+        List<ContactItemDTO> contactList = msg.getContactList();
         log.info(JSON.toJSONString(msg));
         if (msg.isIdSuccess()) {
             log.info("登录成功");
-            Platform.runLater(()->loginPresenter.loginSuccess(msg));
+            Platform.runLater(()-> {
+                view.onLoginSuccess(msg);
+
+            });
         } else {
             log.info("登录失败，检查账号密码");
-            Platform.runLater(loginPresenter::loginFail);
+            Platform.runLater(view::onLoginFailed);
         }
     }
 

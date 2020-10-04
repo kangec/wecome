@@ -26,7 +26,7 @@ public class ClientChannelInit extends ChannelInitializer<SocketChannel> {
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast(new ObjDecoder());
 
-        pipeline.addLast("loginHandler", new LoginHandler(uiService));
+        pipeline.addLast("loginHandler", new LoginHandler(uiService.getLoginView()));
 
         pipeline.addLast(new ObjEncoder());
     }
