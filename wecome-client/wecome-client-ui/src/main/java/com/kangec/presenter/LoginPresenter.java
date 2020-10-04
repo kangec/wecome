@@ -4,6 +4,7 @@ import com.kangec.common.StringUtils;
 import com.kangec.contract.LoginContract;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import packet.login.LoginRequest;
 
 /**
  * @Author Ardien
@@ -33,6 +34,7 @@ public class LoginPresenter implements LoginContract.Presenter {
                 // 通知视图层，开始进行登录操作
                 loginUI.onStartLogin();
                 doLogin(username,password);
+                loginUI.onLoginSuccess();
             }else {
                 loginUI.onPasswordError();
                 log.info("密码校验失败：密码不合法。");

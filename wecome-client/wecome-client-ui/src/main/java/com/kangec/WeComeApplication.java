@@ -17,5 +17,6 @@ public class WeComeApplication extends Application {
     public void start(Stage primaryStage) {
         LoginUI login = new LoginUI();
         login.doShow();
+        login.test();
     }
 }
