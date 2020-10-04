@@ -2,14 +2,13 @@ package com.kangec.client;
 
 import com.kangec.client.service.UIService;
 import com.kangec.client.socket.WeComeNettyClient;
-import com.kangec.client.ui.contract.LoginContract;
-import com.kangec.client.ui.ui.LoginUI;
+import com.kangec.client.view.contract.LoginContract;
+import com.kangec.client.view.ui.LoginUI;
 import io.netty.channel.Channel;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -23,12 +22,12 @@ public class ClientApplication extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         LoginContract.View login = new LoginUI();
+        UIService uiService = new UIService();
+        uiService.setLoginView(login);
         login.doShow();
 
-        LoginContract.Presenter loginPresenter = login.getPresenter();
-        UIService uiService = new UIService();
-        uiService.setLoginPresenter(loginPresenter);
 
         // 2. 启动socket连接
         log.info("NettyClient连接服务开始 inetHost：{} inetPort：{}", "127.0.0.1", 9946);
