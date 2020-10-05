@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import packet.login.dto.ChatItemDTO;
 import packet.login.dto.ContactItemDTO;
+import packet.login.dto.GroupItemDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +49,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Chat> getChats(String userId) {
-        return chatsMapper.queryChats();
-
+    public List<ChatItemDTO> getChatList(String userId) {
+        List<ChatItemDTO> chatList = new ArrayList<>();
+        List<Chat> chats = chatsMapper.queryChats();
+        if (chats == null) return null;
+        chats.forEach(chat -> {
+            ChatItemDTO itemDTO = buildChatItemDTO(chat);
+            chatList.add(itemDTO);
+        });
+        return chatList;
     }
 
     @Override
@@ -60,16 +67,51 @@ public class UserServiceImpl implements UserService {
 
         for (String contactId : contactIds) {
             User user = userMapper.selectUserByUserId(contactId);
-            ContactItemDTO contactItemDTO = ContactItemDTO.builder().contactId(user.getUserId())
-                    .contactName(user.getNickName()).contactAvatar(user.getAvatar()).build();
+            ContactItemDTO contactItemDTO = ContactItemDTO.builder()
+                    .contactId(user.getUserId())
+                    .contactName(user.getNickName())
+                    .contactAvatar(user.getAvatar()).build();
             dtoList.add(contactItemDTO);
         }
         return dtoList;
     }
 
+    @Override
+    public List<GroupItemDTO> getGroupList(String userId) {
+        List<GroupItemDTO> groupList = new ArrayList<>();
+        // 拿到该用户所加入的群组ID
+        List<String> groupIds = contactGroupsMapper.queryGroupIdList(userId);
+        groupIds.forEach(id -> {
+            GroupItemDTO itemDTO = buildGroupItemDTO(id);
+            groupList.add(itemDTO);
+        });
+
+        return groupList;
+    }
+
+    /**
+     * 依据 group_id 构建 {@link GroupItemDTO}
+     * @param groupId group_id
+     * @return GroupItemDTO
+     */
+    private GroupItemDTO buildGroupItemDTO(String groupId) {
+        Groups groups = groupsMapper.queryGroupsById(groupId);
+
+        return GroupItemDTO.builder()
+                .groupId(groups.getGroupId())
+                .groupName(groups.getGroupName())
+                .groupAvatar(groups.getAvatar())
+                .build();
+    }
+
+    /**
+     *
+     * @param chat
+     * @return
+     */
     private ChatItemDTO buildChatItemDTO(Chat chat) {
         ChatItemDTO chatItemDTO = null;
-        String id = chat.getUserId();
+        String id = chat.getChatId();
         // 好友
         if (chat.getChatType()==0) {
             User user = userMapper.selectUserByUserId(id);
@@ -83,6 +125,7 @@ public class UserServiceImpl implements UserService {
         // 群组
         if (chat.getChatType() == 1) {
             Groups group = groupsMapper.queryGroupsById(id);
+            if (group == null) return null;
             chatItemDTO = ChatItemDTO.builder()
                     .chatType(1)
                     .chatId(group.getGroupId())

@@ -15,6 +15,7 @@ import packet.login.LoginRequest;
 import packet.login.LoginResponse;
 import packet.login.dto.ChatItemDTO;
 import packet.login.dto.ContactItemDTO;
+import packet.login.dto.GroupItemDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,12 +59,11 @@ public class LoginHandler extends BaseHandler<LoginRequest> {
         User user = userService.getUserInfo(userId);
 
         // 2.用户的对话框列表
-        List<Chat> chatList = userService.getChats(userId);
-
+        List<ChatItemDTO> chatList = userService.getChatList(user.getUserId());
 
         // 3. 通讯录列表
         List<ContactItemDTO> contactList = userService.getContactList(user.getUserId());
-
+        List<GroupItemDTO> groupList = userService.getGroupList(user.getUserId());
         // TODO 初始化传输数据对象
         // 添加到管道缓存中
 
@@ -74,9 +74,9 @@ public class LoginHandler extends BaseHandler<LoginRequest> {
                 .userId(user.getUserId())
                 .avatar(user.getAvatar())
                 .nickName(user.getNickName())
-                .chatList(null)
+                .chatList(chatList)
                 .contactList(contactList)
-                .groupList(null)
+                .groupList(groupList)
                 .build();
         log.info("用户登录成功，状态返回： {}", JSON.toJSONString(acceptLogin));
         ctx.writeAndFlush(acceptLogin);

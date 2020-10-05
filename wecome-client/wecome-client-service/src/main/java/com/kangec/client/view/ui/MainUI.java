@@ -19,7 +19,9 @@ import javafx.stage.StageStyle;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import packet.login.LoginResponse;
+import packet.login.dto.ChatItemDTO;
 import packet.login.dto.ContactItemDTO;
+import packet.login.dto.GroupItemDTO;
 
 import java.io.IOException;
 import java.util.Date;
@@ -758,6 +760,13 @@ public class MainUI extends UIBinding implements MainContract.View {
     @Override
     public void doShow(LoginResponse msg) {
         setUserInfo(msg.getUserId(),msg.getNickName(),msg.getAvatar());
+
+        List<ChatItemDTO> chatList = msg.getChatList();
+        if (chatList == null) return;
+        chatList.forEach(item -> {
+            addTalkBox(0, item.getChatType(), item.getChatId(),item.getNick(),item.getAvatar(),item.getMsg(),item.getDate(),true);
+        });
+
         List<ContactItemDTO> contactList = msg.getContactList();
         if (contactList == null) return;
         contactList.forEach(item -> {
@@ -765,6 +774,13 @@ public class MainUI extends UIBinding implements MainContract.View {
                                                 ,item.getContactName()
                                                 ,item.getContactAvatar());
         });
+
+        List<GroupItemDTO> groupList = msg.getGroupList();
+        if (groupList == null) return;
+        groupList.forEach(item -> {
+            addGroupToContacts(item.getGroupId(),item.getGroupName(),item.getGroupAvatar());
+        });
+
         super.show();
     }
 

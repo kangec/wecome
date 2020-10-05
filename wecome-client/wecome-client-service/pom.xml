@@ -15,7 +15,6 @@
         <dependency>
             <groupId>com.kangec</groupId>
             <artifactId>wecome-common</artifactId>
-            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -9,13 +9,10 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.*;
 
 @Slf4j
-public class ClientApplication extends Application{
+public class WeComeClientApplication extends Application{
 
     private static ExecutorService executorService = Executors.newFixedThreadPool(2);
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
@@ -38,7 +35,7 @@ public class ClientApplication extends Application{
 
         while (!nettyClient.isActive()) {
             log.info("NettyClient启动服务 ...");
-            Thread.sleep(500);
+            TimeUnit.SECONDS.sleep(2);
         }
         log.info("NettyClient连接服务完成 {}", channel.localAddress());
     }
