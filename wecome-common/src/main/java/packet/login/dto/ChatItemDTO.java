@@ -1,5 +1,6 @@
 package packet.login.dto;
 
+import domain.Message;
 import lombok.Builder;
 import lombok.Data;
 
