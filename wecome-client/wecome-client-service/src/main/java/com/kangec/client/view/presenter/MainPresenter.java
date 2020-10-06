@@ -3,9 +3,13 @@ package com.kangec.client.view.presenter;
 import com.alibaba.fastjson.JSON;
 import com.kangec.client.cache.Beans;
 import com.kangec.client.view.contract.MainContract;
+import domain.MsgFlag;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import packet.chat.ChatDialogRequest;
 import packet.message.MessageRequest;
+import utils.StatusCode;
+
 import java.util.Date;
 
 /**
@@ -56,26 +60,51 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void doDeleteDialogEvent(String userId, String contactId) {
         log.info("用户 " + userId +" 清除对话框 " + contactId);
+        ChatDialogRequest request = ChatDialogRequest.builder()
+                .action(StatusCode.Action.DELETE)
+                .chatType(StatusCode.ChatType.PERSONAL.getValue())
+                .contactId(contactId)
+                .userId(userId)
+                .build();
+        Channel channel = Beans.getBean(Beans.CLIENT_CHANNEL, Channel.class);
+        channel.writeAndFlush(request);
     }
 
     @Override
     public void doContactSearch(String userId, String text) {
-
+        log.info("搜索好友:{}", text);
     }
 
     @Override
-    public void doEventAddTalkUser(String userId, String userFriendId) {
-
+    public void doEventAddTalkUser(String userId, String contactId) {
+        log.info("添加对话框:{}", contactId);
+        ChatDialogRequest request = ChatDialogRequest.builder()
+                .action(StatusCode.Action.ADD)
+                .chatType(StatusCode.ChatType.PERSONAL.getValue())
+                .contactId(contactId)
+                .userId(userId)
+                .build();
+        Channel channel = Beans.getBean(Beans.CLIENT_CHANNEL, Channel.class);
+        channel.writeAndFlush(request);
     }
 
     @Override
     public void doEventAddTalkGroup(String userId, String groupId) {
+        log.info("添加对话框:{}", groupId);
+        ChatDialogRequest request = ChatDialogRequest.builder()
+                .action(StatusCode.Action.ADD)
+                .chatType(StatusCode.ChatType.GROUP.getValue())
+                .contactId(groupId)
+                .userId(userId)
+                .build();
+        Channel channel = Beans.getBean(Beans.CLIENT_CHANNEL, Channel.class);
+        channel.writeAndFlush(request);
 
     }
 
     @Override
     public void doEventAddContactUser(String userId, String contactId) {
-
+        log.info("添加好友:{}", contactId);
     }
 
     /**

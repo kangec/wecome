@@ -19,13 +19,12 @@ import javafx.stage.StageStyle;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import packet.login.LoginResponse;
-import packet.login.dto.ChatItemDTO;
+import packet.chat.dto.ChatItemDTO;
 import packet.login.dto.ContactItemDTO;
 import packet.login.dto.GroupItemDTO;
-import packet.login.dto.MessagePaneDTO;
+import packet.message.dto.MessagePaneDTO;
 
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -764,55 +763,55 @@ public class MainUI extends UIBinding implements MainContract.View {
         setUserInfo(msg.getUserId(),msg.getNickName(),msg.getAvatar());
         super.show();
         List<ChatItemDTO> chatList = msg.getChatList();
-        if (chatList == null) return;
-        chatList.forEach(item -> {
-            addTalkBox(0, item.getChatType(), item.getChatId(),item.getNick(),item.getAvatar(),item.getMsg(),item.getDate(),true);
-            List<MessagePaneDTO> messageList = item.getMessagePaneList();
-            if (messageList == null || messageList.isEmpty()) return;
-            messageList.sort((o1, o2) -> (int) (o1.getMsgDate().getTime() - o2.getMsgDate().getTime()));
-            switch (item.getChatType()) {
-                case 0 : {
-                    messageList.forEach(message -> {
-                        if (message.getMsgFlag() == 0)
-                            addTalkMsgRight(message.getMsgPaneId()
-                                    ,message.getMsgBody()
-                                    ,message.getMsgDate()
-                                    ,true
-                                    ,false
-                                    ,false);
-                        else if (message.getMsgFlag() == 1){
-                            addTalkMsgUserLeft(message.getMsgPaneId()
-                                    ,message.getMsgBody(),message.getMsgDate()
-                                    ,true
-                                    ,false
-                                    ,false);
-                        }
-                    });
-                    break;
+        if (chatList != null) {
+            chatList.forEach(item -> {
+                addTalkBox(0, item.getChatType(), item.getChatId(), item.getNick(), item.getAvatar(), item.getMsg(), item.getDate(), true);
+                List<MessagePaneDTO> messageList = item.getMessagePaneList();
+                if (messageList == null || messageList.isEmpty()) return;
+                messageList.sort((o1, o2) -> (int) (o1.getMsgDate().getTime() - o2.getMsgDate().getTime()));
+                switch (item.getChatType()) {
+                    case 0: {
+                        messageList.forEach(message -> {
+                            if (message.getMsgFlag() == 0)
+                                addTalkMsgRight(message.getMsgPaneId()
+                                        , message.getMsgBody()
+                                        , message.getMsgDate()
+                                        , true
+                                        , false
+                                        , false);
+                            else if (message.getMsgFlag() == 1) {
+                                addTalkMsgUserLeft(message.getMsgPaneId()
+                                        , message.getMsgBody(), message.getMsgDate()
+                                        , true
+                                        , false
+                                        , false);
+                            }
+                        });
+                        break;
+                    }
+                    case 1: {
+                        return;
+                    }
+                    default:
+                        break;
                 }
-                case 1 : {
-                    return;
-                }
-                default:
-                    break;
-            }
-        });
-
+            });
+        }
         List<ContactItemDTO> contactList = msg.getContactList();
-        if (contactList == null) return;
-        contactList.forEach(item -> {
-            addContactToContactList(false,item.getContactId()
-                                                ,item.getContactName()
-                                                ,item.getContactAvatar());
-        });
+        if (contactList != null) {
+            contactList.forEach(item -> {
+                addContactToContactList(false, item.getContactId()
+                        , item.getContactName()
+                        , item.getContactAvatar());
+            });
+        }
 
         List<GroupItemDTO> groupList = msg.getGroupList();
-        if (groupList == null) return;
-        groupList.forEach(item -> {
-            addGroupToContacts(item.getGroupId(),item.getGroupName(),item.getGroupAvatar());
-        });
-
-
+        if (groupList != null) {
+            groupList.forEach(item -> {
+                addGroupToContacts(item.getGroupId(), item.getGroupName(), item.getGroupAvatar());
+            });
+        }
     }
 
     public String getUserId() {
