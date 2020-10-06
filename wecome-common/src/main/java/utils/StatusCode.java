@@ -8,6 +8,11 @@ package utils;
  **/
 public final class StatusCode {
 
+    public enum Action {
+        ADD,DELETE
+    }
+
+
     public enum MsgType{
 
         Myself(0, "自己"),

@@ -1,6 +1,8 @@
 package packet;
 
 
+import packet.chat.ChatDialogRequest;
+import packet.chat.ChatDialogResponse;
 import packet.login.LoginRequest;
 import packet.login.LoginResponse;
 import packet.message.MessageRequest;
@@ -29,6 +31,8 @@ public abstract class Packet {
         packets.put(Command.LOGIN_RESPONSE, LoginResponse.class);
         packets.put(Command.MESSAGE_REQUEST, MessageRequest.class);
         packets.put(Command.MESSAGE_RESPONSE, MessageResponse.class);
+        packets.put(Command.CHAT_DIALOG_REQUEST_REQUEST, ChatDialogRequest.class);
+        packets.put(Command.CHAT_DIALOG_REQUEST_RESPONSE, ChatDialogResponse.class);
     }
 
     /**

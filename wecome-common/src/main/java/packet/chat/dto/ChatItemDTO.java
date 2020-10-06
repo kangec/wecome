@@ -1,8 +1,8 @@
-package packet.login.dto;
+package packet.chat.dto;
 
-import domain.Message;
 import lombok.Builder;
 import lombok.Data;
+import packet.message.dto.MessagePaneDTO;
 
 import java.io.Serializable;
 import java.util.Date;
