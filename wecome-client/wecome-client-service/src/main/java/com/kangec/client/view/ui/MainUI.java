@@ -22,8 +22,10 @@ import packet.login.LoginResponse;
 import packet.login.dto.ChatItemDTO;
 import packet.login.dto.ContactItemDTO;
 import packet.login.dto.GroupItemDTO;
+import packet.login.dto.MessagePaneDTO;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -760,11 +762,40 @@ public class MainUI extends UIBinding implements MainContract.View {
     @Override
     public void doShow(LoginResponse msg) {
         setUserInfo(msg.getUserId(),msg.getNickName(),msg.getAvatar());
-
+        super.show();
         List<ChatItemDTO> chatList = msg.getChatList();
         if (chatList == null) return;
         chatList.forEach(item -> {
             addTalkBox(0, item.getChatType(), item.getChatId(),item.getNick(),item.getAvatar(),item.getMsg(),item.getDate(),true);
+            List<MessagePaneDTO> messageList = item.getMessagePaneList();
+            if (messageList == null || messageList.isEmpty()) return;
+            messageList.sort((o1, o2) -> (int) (o1.getMsgDate().getTime() - o2.getMsgDate().getTime()));
+            switch (item.getChatType()) {
+                case 0 : {
+                    messageList.forEach(message -> {
+                        if (message.getMsgFlag() == 0)
+                            addTalkMsgRight(message.getMsgPaneId()
+                                    ,message.getMsgBody()
+                                    ,message.getMsgDate()
+                                    ,true
+                                    ,false
+                                    ,false);
+                        else if (message.getMsgFlag() == 1){
+                            addTalkMsgUserLeft(message.getMsgPaneId()
+                                    ,message.getMsgBody(),message.getMsgDate()
+                                    ,true
+                                    ,false
+                                    ,false);
+                        }
+                    });
+                    break;
+                }
+                case 1 : {
+                    return;
+                }
+                default:
+                    break;
+            }
         });
 
         List<ContactItemDTO> contactList = msg.getContactList();
@@ -781,7 +812,7 @@ public class MainUI extends UIBinding implements MainContract.View {
             addGroupToContacts(item.getGroupId(),item.getGroupName(),item.getGroupAvatar());
         });
 
-        super.show();
+
     }
 
     public String getUserId() {

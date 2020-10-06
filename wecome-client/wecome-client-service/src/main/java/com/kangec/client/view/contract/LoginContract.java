@@ -19,6 +19,7 @@ public interface LoginContract {
         void onUserNameError();
         void onPasswordError();
         LoginContract.Presenter getPresenter();
+        MainContract.View getMainView();
 
         /**
          * 登录事件

@@ -1,12 +1,11 @@
 package com.kangec.client.view.presenter;
 
 import com.alibaba.fastjson.JSON;
+import com.kangec.client.cache.Beans;
 import com.kangec.client.view.contract.MainContract;
-import domain.Message;
-import domain.MsgFlag;
-import domain.Type;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
-
+import packet.message.MessageRequest;
 import java.util.Date;
 
 /**
@@ -29,22 +28,23 @@ public class MainPresenter implements MainContract.Presenter {
      *
      * @param userId    用户ID（自己）
      * @param contactId 好友ID
-     * @param msgType   消息类型 0单人，1多人
+     * @param msgFlag   消息类型 0单人，1多人
      * @param msgDate   消息的时间
      * @param msgBody   消息体
      */
     @Override
-    public void doSendMessage(String userId, String contactId, Integer msgType, Date msgDate, String msgBody) {
+    public void doSendMessage(String userId, String contactId, Integer msgFlag, Date msgDate, String msgBody) {
         log.info("消息封装 ==>> 传递给Netty客户端发送给服务器");
-        Message message = Message.builder()
+        MessageRequest messageRequest = MessageRequest.builder()
                 .userId(userId)
                 .contactId(contactId)
-                .msgDate(msgDate)
-                .msgFlag(MsgFlag.SEND)
-                .msgType(msgType == 1 ? Type.GROUP : Type.PERSONAL)
+                .msgFlag(msgFlag)
                 .msgBody(msgBody)
+                .msgDate(msgDate)
                 .build();
-        log.info(JSON.toJSONString(message));
+        log.info(JSON.toJSONString(messageRequest));
+        Channel channel = Beans.getBean(Beans.CLIENT_CHANNEL, Channel.class);
+        channel.writeAndFlush(messageRequest);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.kangec.client.service;
 
 import com.kangec.client.view.contract.LoginContract;
+import com.kangec.client.view.contract.MainContract;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -16,7 +17,12 @@ public class UIService {
         return loginView;
     }
 
+    public MainContract.View getMainView() {
+        return loginView.getMainView();
+    }
+
     public void setLoginView(LoginContract.View loginView) {
+
         this.loginView = loginView;
     }
 }
