@@ -6,8 +6,15 @@
     <select id="queryMessageByUserId" resultType="Message">
         select *
         from message
-        where user_id = #{userId}
-          and contact_id = #{chatId}
+        where (user_id = #{userId}
+            and contact_id = #{chatId})
+           or (user_id = #{chatId}
+            and contact_id = #{userId})
         order by msg_time desc;
     </select>
+
+    <insert id="insertMessageRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into message(user_id, contact_id, chat_type, body, msg_time)
+        values(#{userId}, #{contactId}, #{chatType}, #{body}, #{msgTime})
+    </insert>
 </mapper>

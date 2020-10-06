@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,5 +27,17 @@ class MessageMapperTest {
         List<Message> list = messageMapper.queryMessageByUserId("1000001", "20001");
         Assert.assertNotNull(list);
         Assert.assertNotNull(list.get(0));
+    }
+
+    @Test
+    void insertMessageRecord() {
+        Message message = Message.builder()
+                .userId("1000001")
+                .contactId("1000002")
+                .chatType(0)
+                .msgTime(new Date())
+                .body("测试测试测试测试，测试测试测试测试。")
+                .build();
+        messageMapper.insertMessageRecord(message);
     }
 }

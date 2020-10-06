@@ -1,11 +1,13 @@
 package com.kangec.wecome.infrastructure.pojo;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
+@Builder
 @Data
 public class Chat {
     private Long id;

@@ -5,6 +5,7 @@ import com.kangec.wecome.infrastructure.pojo.User;
 import packet.login.dto.ChatItemDTO;
 import packet.login.dto.ContactItemDTO;
 import packet.login.dto.GroupItemDTO;
+import packet.message.MessageRequest;
 
 
 import java.util.List;
@@ -45,4 +46,6 @@ public interface UserService {
     List<ContactItemDTO> getContactList(String userId);
 
     List<GroupItemDTO> getGroupList(String userId);
+
+    void asyncAddMessageRecord(MessageRequest msg);
 }

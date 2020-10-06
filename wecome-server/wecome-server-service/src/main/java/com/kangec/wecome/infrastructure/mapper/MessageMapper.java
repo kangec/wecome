@@ -17,5 +17,7 @@ import java.util.List;
 @Mapper
 @Component
 public interface MessageMapper {
+    void insertMessageRecord(Message message);
+
     List<Message> queryMessageByUserId(@Param("userId") String userId, @Param("chatId") String chatId);
 }

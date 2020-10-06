@@ -17,7 +17,7 @@ public class ChatsMapperTest {
 
     @Test
     void queryChats() {
-        List<Chat> chatList = chatsMapper.queryChats();
+        List<Chat> chatList = chatsMapper.queryChats("1000001");
         Assert.assertNotNull(chatList);
         Assert.assertNotNull(chatList.get(0));
     }

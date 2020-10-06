@@ -7,15 +7,22 @@ import com.kangec.wecome.infrastructure.pojo.Message;
 import com.kangec.wecome.infrastructure.pojo.User;
 import com.kangec.wecome.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import packet.login.dto.ChatItemDTO;
 import packet.login.dto.ContactItemDTO;
 import packet.login.dto.GroupItemDTO;
 import packet.login.dto.MessagePaneDTO;
+import packet.message.MessageRequest;
+import utils.StatusCode;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static utils.StatusCode.ChatType.GROUP;
+import static utils.StatusCode.ChatType.PERSONAL;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private GroupsMapper groupsMapper;
     private ContactsMapper contactsMapper;
     private MessageMapper messageMapper;
+    private ThreadPoolTaskExecutor executor;
 
     /**
      * 登陆校验
@@ -55,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<ChatItemDTO> getChatList(String userId) {
         List<ChatItemDTO> chatList = new ArrayList<>();
-        List<Chat> chats = chatsMapper.queryChats();
+        List<Chat> chats = chatsMapper.queryChats(userId);
         if (chats == null) return null;
         chats.forEach(chat -> {
             ChatItemDTO itemDTO = buildChatItemDTO(chat, userId);
@@ -93,6 +101,50 @@ public class UserServiceImpl implements UserService {
         return groupList;
     }
 
+    @Override
+    public void asyncAddMessageRecord(MessageRequest msg) {
+        executor.execute(() -> {
+            Message message = Message.builder()
+                    .userId(msg.getUserId())
+                    .contactId(msg.getContactId())
+                    .chatType(msg.getMsgType())
+                    .body(msg.getMsgBody())
+                    .msgTime(msg.getMsgDate())
+                    .build();
+            messageMapper.insertMessageRecord(message);
+
+            // TODO 可优化
+            // 如果对方没有与你的对话框，则要将对话框数据传给他
+            if (chatsMapper.queryChatsByUserIdWithChatId(msg.getContactId(), msg.getUserId()) == null) {
+                Date now = new Date();
+                Chat contact = Chat.builder()
+                        .userId(msg.getContactId())
+                        .chatId(msg.getUserId())
+                        .chatType(msg.getMsgFlag())
+                        .createTime(now)
+                        .updateTime(now)
+                        .build();
+                addChatDialog(contact);
+            }
+            // 如果己方没有存入
+            if (chatsMapper.queryChatsByUserIdWithChatId(msg.getUserId(), msg.getContactId()) == null) {
+                Date now = new Date();
+                Chat chat = Chat.builder()
+                        .userId(msg.getUserId())
+                        .chatId(msg.getContactId())
+                        .chatType(msg.getMsgFlag())
+                        .createTime(now)
+                        .updateTime(now)
+                        .build();
+                addChatDialog(chat);
+            }
+        });
+    }
+
+    private void addChatDialog(Chat chat) {
+        chatsMapper.insert(chat);
+    }
+
     /**
      * 依据 group_id 构建 {@link GroupItemDTO}
      *
@@ -116,21 +168,19 @@ public class UserServiceImpl implements UserService {
     private ChatItemDTO buildChatItemDTO(Chat chat, String userId) {
         ChatItemDTO chatItemDTO = null;
         List<MessagePaneDTO> messagePaneList = null;
-        String id = chat.getChatId();
-        List<Message> messages = messageMapper.queryMessageByUserId(userId, id);
+        String chatId = chat.getChatId();
+        List<Message> messages = messageMapper.queryMessageByUserId(userId, chatId);
         Message lastMsg = null;
         if (messages == null) {
-            lastMsg = new Message();
-            lastMsg.setBody("");
-            lastMsg.setMsgTime(new Date());
+            lastMsg = Message.builder().body("").msgTime(new Date()).build();
         } else {
             lastMsg = messages.get(0);
-            messagePaneList = buildMessagePaneList(messages);
         }
 
         // 好友
-        if (chat.getChatType() == 0) {
-            User user = userMapper.selectUserByUserId(id);
+        if (chat.getChatType() == PERSONAL.getValue()) {
+            User user = userMapper.selectUserByUserId(chatId);
+            messagePaneList = buildUserMessagePaneList(messages, userId, chatId);
             chatItemDTO = ChatItemDTO.builder()
                     .chatType(0)
                     .chatId(user.getUserId())
@@ -142,8 +192,9 @@ public class UserServiceImpl implements UserService {
                     .build();
         } else
             // 群组
-            if (chat.getChatType() == 1) {
-                Groups group = groupsMapper.queryGroupsById(id);
+            if (chat.getChatType() == StatusCode.ChatType.GROUP.getValue()) {
+                Groups group = groupsMapper.queryGroupsById(chatId);
+                //messagePaneList = buildGroupMessagePaneList(messages);
                 if (group == null) return null;
                 chatItemDTO = ChatItemDTO.builder()
                         .chatType(1)
@@ -158,14 +209,57 @@ public class UserServiceImpl implements UserService {
         return chatItemDTO;
     }
 
-    private List<MessagePaneDTO> buildMessagePaneList(List<Message> messages) {
-        List<MessagePaneDTO> messagePaneList = new ArrayList<>();
-        // TODO 构建聊天记录面板
-        messages.forEach(message -> {
-            MessagePaneDTO messagePaneDTO = MessagePaneDTO.builder().build();
-        });
+    private List<MessagePaneDTO> buildGroupMessagePaneList(List<Message> messages) {
+        if (messages == null) return null;
+        return messages.stream()
+                .filter(message -> message.getChatType() != GROUP.getValue())
+                .map(message -> MessagePaneDTO.builder()
+                        .build()
 
-        return messagePaneList;
+                ).collect(Collectors.toList());
+    }
+
+    /**
+     * 聊天记录数据传输列表
+     *
+     * @param messages
+     * @param chatId
+     * @param userId
+     * @return
+     */
+    private List<MessagePaneDTO> buildUserMessagePaneList(List<Message> messages, String userId, String chatId) {
+        if (messages == null) return null;
+        List<MessagePaneDTO> list = new ArrayList<>();
+        messages.forEach(message -> {
+            if (message.getChatType() == PERSONAL.getValue()) {
+                boolean msgType = userId.equals(message.getUserId());
+                MessagePaneDTO dto = MessagePaneDTO.builder()
+                        .msgPaneId(chatId)
+                        .userId(msgType ? userId : message.getContactId())
+                        .msgFlag(msgType ? 0 : 1)
+                        .msgBody(message.getBody())
+                        .msgDate(message.getMsgTime())
+                        .msgType(message.getChatType())
+                        .build();
+                list.add(dto);
+            }
+        });
+        return list;
+
+        /*return messages.stream()
+                .filter(message -> message.getChatType() != PERSONAL.getValue())
+                .map(message -> {
+                            boolean msgType = userId.equals(message.getUserId());
+                            return MessagePaneDTO.builder()
+                                    .msgPaneId(chatId)
+                                    .userId(msgType ? userId : message.getContactId())
+                                    .msgType(msgType ? 0 : 1)
+                                    .msgBody(message.getBody())
+                                    .msgDate(message.getMsgTime())
+                                    .msgFlag(message.getChatType())
+                                    .build();
+                        }
+                ).collect(Collectors.toList());*/
     }
 
 
@@ -198,5 +292,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public void setMessageMapper(MessageMapper messageMapper) {
         this.messageMapper = messageMapper;
+    }
+
+    @Autowired
+    public void setExecutor(ThreadPoolTaskExecutor executor) {
+        this.executor = executor;
     }
 }

@@ -2,6 +2,7 @@ package com.kangec.wecome.infrastructure.mapper;
 
 import com.kangec.wecome.infrastructure.pojo.Chat;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,5 +17,11 @@ import java.util.List;
 @Component
 @Mapper
 public interface ChatsMapper {
-    List<Chat> queryChats();
+
+    void insert(Chat chat);
+
+    List<Chat> queryChats(String userId);
+
+    List<Chat> queryChatsByUserIdWithChatId(@Param("userId") String userId
+                                     ,@Param("contactId") String contactId);
 }

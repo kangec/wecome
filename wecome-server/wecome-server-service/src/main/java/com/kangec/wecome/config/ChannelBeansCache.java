@@ -18,6 +18,11 @@ public class ChannelBeansCache {
     private static final Map<String, String> userChannelIds = new ConcurrentHashMap<>();
     private static final Map<String, ChannelGroup> groupChannels = new ConcurrentHashMap<>();
 
+    public static Channel get(String userId) {
+        return userChannels.get(userId);
+    }
+
+
     public static void put(String userId, Channel channel) {
         userChannels.put(userId, channel);
         userChannelIds.put(channel.id().toString(), userId);
