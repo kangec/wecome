@@ -21,4 +21,11 @@ public class ChatsMapperTest {
         Assert.assertNotNull(chatList);
         Assert.assertNotNull(chatList.get(0));
     }
+
+    @Test
+    void queryChatsByUserIdWithChatId() {
+        Long l = chatsMapper.queryChatsByUserIdWithChatId("1000001", "1000002");
+        System.out.println(l);
+
+    }
 }

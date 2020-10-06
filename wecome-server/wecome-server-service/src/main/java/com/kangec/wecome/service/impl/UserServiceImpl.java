@@ -9,11 +9,12 @@ import com.kangec.wecome.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
-import packet.login.dto.ChatItemDTO;
+import packet.chat.ChatDialogRequest;
+import packet.chat.dto.ChatItemDTO;
 import packet.login.dto.ContactItemDTO;
 import packet.login.dto.GroupItemDTO;
-import packet.login.dto.MessagePaneDTO;
 import packet.message.MessageRequest;
+import packet.message.dto.MessagePaneDTO;
 import utils.StatusCode;
 
 import java.util.ArrayList;
@@ -112,19 +113,46 @@ public class UserServiceImpl implements UserService {
                     .msgTime(msg.getMsgDate())
                     .build();
             messageMapper.insertMessageRecord(message);
+        });
+    }
 
-            // TODO 可优化
+    @Override
+    public void asyncResolveChatRecord(ChatDialogRequest msg) {
+        StatusCode.Action action = msg.getAction();
+        switch (action) {
+            case ADD:
+                addChatDialog(msg);
+                break;
+            case DELETE:
+                deleteChatDialog(msg);
+                break;
+            default:
+                throw new RuntimeException("Action Not Defend");
+        }
+    }
+
+    @Override
+    public Long getChatList(String userId, String contactId) {
+        return chatsMapper.queryChatsByUserIdWithChatId(userId, contactId);
+    }
+
+    private void deleteChatDialog(ChatDialogRequest msg) {
+        chatsMapper.delete(msg.getUserId(), msg.getContactId());
+    }
+
+    private void addChatDialog(ChatDialogRequest msg) {
+        executor.execute(() -> {
             // 如果对方没有与你的对话框，则要将对话框数据传给他
             if (chatsMapper.queryChatsByUserIdWithChatId(msg.getContactId(), msg.getUserId()) == null) {
                 Date now = new Date();
                 Chat contact = Chat.builder()
                         .userId(msg.getContactId())
                         .chatId(msg.getUserId())
-                        .chatType(msg.getMsgFlag())
+                        .chatType(msg.getChatType())
                         .createTime(now)
                         .updateTime(now)
                         .build();
-                addChatDialog(contact);
+                chatsMapper.insert(contact);
             }
             // 如果己方没有存入
             if (chatsMapper.queryChatsByUserIdWithChatId(msg.getUserId(), msg.getContactId()) == null) {
@@ -132,17 +160,13 @@ public class UserServiceImpl implements UserService {
                 Chat chat = Chat.builder()
                         .userId(msg.getUserId())
                         .chatId(msg.getContactId())
-                        .chatType(msg.getMsgFlag())
+                        .chatType(msg.getChatType())
                         .createTime(now)
                         .updateTime(now)
                         .build();
-                addChatDialog(chat);
+                chatsMapper.insert(chat);
             }
         });
-    }
-
-    private void addChatDialog(Chat chat) {
-        chatsMapper.insert(chat);
     }
 
     /**

@@ -22,6 +22,8 @@ public interface ChatsMapper {
 
     List<Chat> queryChats(String userId);
 
-    List<Chat> queryChatsByUserIdWithChatId(@Param("userId") String userId
+    Long queryChatsByUserIdWithChatId(@Param("userId") String userId
                                      ,@Param("contactId") String contactId);
+
+    void delete(@Param("userId")String userId, @Param("contactId")String contactId);
 }

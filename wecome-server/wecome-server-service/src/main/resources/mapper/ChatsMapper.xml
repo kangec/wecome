@@ -8,7 +8,7 @@
         FROM chat where user_id = #{userId};
     </select>
 
-    <select id="queryChatsByUserIdWithChatId" resultType="Chat">
+    <select id="queryChatsByUserIdWithChatId" resultType="long">
         SELECT id
         FROM chat
         WHERE user_id = #{userId}
@@ -20,4 +20,8 @@
         insert into chat(user_id, chat_id, chat_type, create_time, update_time)
         VALUES (#{userId}, #{chatId}, #{chatType}, #{createTime}, #{updateTime});
     </insert>
+
+    <delete id="delete">
+        DELETE FROM chat WHERE user_id = #{userId} AND chat_id = #{contactId};
+    </delete>
 </mapper>

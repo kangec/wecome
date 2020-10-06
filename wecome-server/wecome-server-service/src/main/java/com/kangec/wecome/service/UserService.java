@@ -1,8 +1,8 @@
 package com.kangec.wecome.service;
 
-import com.kangec.wecome.infrastructure.pojo.Chat;
 import com.kangec.wecome.infrastructure.pojo.User;
-import packet.login.dto.ChatItemDTO;
+import packet.chat.ChatDialogRequest;
+import packet.chat.dto.ChatItemDTO;
 import packet.login.dto.ContactItemDTO;
 import packet.login.dto.GroupItemDTO;
 import packet.message.MessageRequest;
@@ -48,4 +48,8 @@ public interface UserService {
     List<GroupItemDTO> getGroupList(String userId);
 
     void asyncAddMessageRecord(MessageRequest msg);
+
+    void asyncResolveChatRecord(ChatDialogRequest msg);
+
+    Long getChatList(String userId, String contactId);
 }
