@@ -2,7 +2,6 @@ package com.kangec.wecome.socket.hander;
 
 import com.alibaba.fastjson.JSON;
 import com.kangec.wecome.config.ChannelBeansCache;
-import com.kangec.wecome.infrastructure.pojo.Chat;
 import com.kangec.wecome.infrastructure.pojo.User;
 import com.kangec.wecome.service.UserService;
 import com.kangec.wecome.socket.BaseHandler;
@@ -13,11 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import packet.login.LoginRequest;
 import packet.login.LoginResponse;
-import packet.login.dto.ChatItemDTO;
+import packet.chat.dto.ChatItemDTO;
 import packet.login.dto.ContactItemDTO;
 import packet.login.dto.GroupItemDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

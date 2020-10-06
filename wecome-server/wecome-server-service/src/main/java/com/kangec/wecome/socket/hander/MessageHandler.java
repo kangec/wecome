@@ -2,11 +2,14 @@ package com.kangec.wecome.socket.hander;
 
 import com.alibaba.fastjson.JSON;
 import com.kangec.wecome.config.ChannelBeansCache;
+import com.kangec.wecome.infrastructure.pojo.User;
 import com.kangec.wecome.service.UserService;
 import com.kangec.wecome.socket.BaseHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
+import packet.chat.ChatDialogResponse;
 import packet.message.MessageRequest;
 import packet.message.MessageResponse;
 
@@ -24,6 +27,7 @@ public class MessageHandler extends BaseHandler<MessageRequest> {
         super(userService);
     }
 
+
     @Override
     public void channelRead(Channel ctx, MessageRequest msg) {
         log.info("接受客户端消息: {}", JSON.toJSONString(msg));
@@ -36,6 +40,22 @@ public class MessageHandler extends BaseHandler<MessageRequest> {
             // 缓存到消息队列，等待用户上线
             return;
         }
+        Long aLong = userService.getChatList(msg.getUserId(), msg.getContactId());
+        if (aLong == null) {
+            User user = userService.getUserInfo(msg.getUserId());
+            ChatDialogResponse response = ChatDialogResponse.builder()
+                    .contactId(msg.getUserId())
+                    .userId(msg.getContactId())
+                    .chatType(msg.getMsgType())
+                    .contactName(user.getNickName())
+                    .avatar(user.getAvatar())
+                    .msgBody(msg.getMsgBody())
+                    .msgDate(msg.getMsgDate())
+                    .isSuccess(true)
+                    .build();
+            contactChannel.writeAndFlush(response);
+        }
+
         MessageResponse response = MessageResponse.builder()
                 .contactId(msg.getUserId())
                 .msgBody(msg.getMsgBody())

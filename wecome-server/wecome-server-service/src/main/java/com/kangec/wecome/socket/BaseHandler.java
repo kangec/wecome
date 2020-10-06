@@ -27,12 +27,6 @@ public abstract class BaseHandler<T> extends SimpleChannelInboundHandler<T> {
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        super.channelActive(ctx);
-        log.info("客户端连接：{}",ctx.channel());
-    }
-
-    @Override
     protected void channelRead0(ChannelHandlerContext ctx, T msg) throws Exception {
         channelRead(ctx.channel(), msg);
     }

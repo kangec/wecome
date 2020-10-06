@@ -3,6 +3,7 @@ package com.kangec.wecome.socket;
 import codec.ObjDecoder;
 import codec.ObjEncoder;
 import com.kangec.wecome.service.UserService;
+import com.kangec.wecome.socket.hander.ChatHandler;
 import com.kangec.wecome.socket.hander.LoginHandler;
 import com.kangec.wecome.socket.hander.MessageHandler;
 import io.netty.channel.ChannelInitializer;
@@ -29,6 +30,9 @@ public class WeComeChannelInitializer extends ChannelInitializer<SocketChannel> 
         pipeline.addLast(new ObjDecoder());
 
         pipeline.addLast(new LoginHandler(userService));
+
+        pipeline.addLast(new ChatHandler(userService));
+
         pipeline.addLast(new MessageHandler(userService));
 
         pipeline.addLast(new ObjEncoder());
