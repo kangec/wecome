@@ -3,6 +3,8 @@ package packet;
 
 import packet.login.LoginRequest;
 import packet.login.LoginResponse;
+import packet.message.MessageRequest;
+import packet.message.MessageResponse;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,6 +27,8 @@ public abstract class Packet {
     static {
         packets.put(Command.LOGIN_REQUEST, LoginRequest.class);
         packets.put(Command.LOGIN_RESPONSE, LoginResponse.class);
+        packets.put(Command.MESSAGE_REQUEST, MessageRequest.class);
+        packets.put(Command.MESSAGE_RESPONSE, MessageResponse.class);
     }
 
     /**
