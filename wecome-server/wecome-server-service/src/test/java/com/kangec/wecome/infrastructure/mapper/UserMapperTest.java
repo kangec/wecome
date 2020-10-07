@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,5 +42,15 @@ public class UserMapperTest {
         List<User> users = userMapper.queryUserContacts("1000001", "%ang%");
         Assert.assertNotNull(users);
         Assert.assertEquals(users.get(0).getPassword(), "123456");
+    }
+
+    @Test
+    void selectUsers() {
+        List<String> ids = new ArrayList<>();
+        ids.add("1000001");
+        ids.add("1000002");
+        ids.add("1000003");
+        List<User> users = userMapper.selectUsers(ids);
+        users.forEach(System.out::println);
     }
 }

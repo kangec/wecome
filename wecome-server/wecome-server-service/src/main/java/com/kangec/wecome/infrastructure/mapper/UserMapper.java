@@ -41,4 +41,6 @@ public interface UserMapper {
     List<User> queryUserContacts(@Param("userId") String userId,@Param("key") String key);
 
     Long insertUser(User user);
+
+    List<User> selectUsers(@Param("ids") List<String> ids);
 }

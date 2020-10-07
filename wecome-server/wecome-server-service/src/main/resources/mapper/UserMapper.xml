@@ -19,6 +19,13 @@
         SELECT password
         FROM USER
         WHERE user_id != #{userId}
-        AND (nick_name LIKE #{key} OR user_id LIKE #{key});
+          AND (nick_name LIKE #{key} OR user_id LIKE #{key});
+    </select>
+
+    <select id="selectUsers" resultType="User">
+        SELECT *
+        FROM USER
+        WHERE user_id in
+        <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
     </select>
 </mapper>
