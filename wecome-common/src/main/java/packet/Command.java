@@ -13,4 +13,6 @@ public final class Command {
     public final static Byte MESSAGE_RESPONSE = 103;
     public final static Byte CHAT_DIALOG_REQUEST_REQUEST = 104;
     public final static Byte CHAT_DIALOG_REQUEST_RESPONSE = 105;
+    public final static Byte SEARCH_CONTACT_REQUEST = 106;
+    public final static Byte SEARCH_CONTACT_RESPONSE = 107;
 }

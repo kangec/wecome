@@ -1,4 +1,4 @@
-package packet.login.dto;
+package packet.contact.dto;
 
 import lombok.Builder;
 import lombok.Data;

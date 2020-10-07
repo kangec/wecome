@@ -4,8 +4,8 @@ import lombok.*;
 import packet.Command;
 import packet.Packet;
 import packet.chat.dto.ChatItemDTO;
-import packet.login.dto.ContactItemDTO;
-import packet.login.dto.GroupItemDTO;
+import packet.contact.dto.ContactItemDTO;
+import packet.contact.dto.GroupItemDTO;
 
 import java.util.List;
 
