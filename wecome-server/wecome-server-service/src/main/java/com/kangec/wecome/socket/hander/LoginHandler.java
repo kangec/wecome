@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 import packet.login.LoginRequest;
 import packet.login.LoginResponse;
 import packet.chat.dto.ChatItemDTO;
-import packet.login.dto.ContactItemDTO;
-import packet.login.dto.GroupItemDTO;
+import packet.contact.dto.ContactItemDTO;
+import packet.contact.dto.GroupItemDTO;
 
 import java.util.List;
 

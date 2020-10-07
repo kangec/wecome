@@ -55,6 +55,7 @@ public class MainUI extends UIBinding implements MainContract.View {
     private String userId;
     private String userNickName;
     private String userHead;
+    ObservableList<Pane> paneObservableList;
 
     // 会话界面控件
     private TextArea txt_input;             // 输入框
@@ -188,10 +189,10 @@ public class MainUI extends UIBinding implements MainContract.View {
                 element.friendLuckListView().getItems().clear();
 
                 // 添加朋友
-                element.friendLuckListView().getItems().add(new ContactPush("1000005", "比丘卡", "11", 0).pane());
-                element.friendLuckListView().getItems().add(new ContactPush("1000006", "兰兰", "14", 1).pane());
-                element.friendLuckListView().getItems().add(new ContactPush("1000007", "Alexa", "6", 2).pane());
-
+                element.friendLuckListView().getItems().add(new ContactPush(userId, userNickName,userHead, 2).pane());
+//                element.friendLuckListView().getItems().add(new ContactPush("1000006", "兰兰", "14", 1).pane());
+//                element.friendLuckListView().getItems().add(new ContactPush("1000007", "Alexa", "6", 2).pane());
+                paneObservableList = element.friendLuckListView().getItems();
             }
         });
     }
@@ -702,8 +703,7 @@ public class MainUI extends UIBinding implements MainContract.View {
         ContactPush friendLuckUser = new ContactPush(contactId, userNickName, userHead, status);
         Pane pane = friendLuckUser.pane();
         // 添加到好友列表
-        ObservableList<Pane> items = contactPushListView.getItems();
-        items.add(pane);
+        paneObservableList.add(pane);
         // 点击事件
         friendLuckUser.statusLabel().setOnMousePressed(event -> {
             presenter.doEventAddContactUser(userId,contactId);

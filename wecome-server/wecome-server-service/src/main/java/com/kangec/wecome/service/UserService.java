@@ -3,8 +3,9 @@ package com.kangec.wecome.service;
 import com.kangec.wecome.infrastructure.pojo.User;
 import packet.chat.ChatDialogRequest;
 import packet.chat.dto.ChatItemDTO;
-import packet.login.dto.ContactItemDTO;
-import packet.login.dto.GroupItemDTO;
+import packet.contact.dto.ContactItemDTO;
+import packet.contact.dto.GroupItemDTO;
+import packet.contact.dto.SearchResultDTO;
 import packet.message.MessageRequest;
 
 
@@ -52,4 +53,6 @@ public interface UserService {
     void asyncResolveChatRecord(ChatDialogRequest msg);
 
     Long getChatList(String userId, String contactId);
+
+    List<SearchResultDTO> searchContacts(String userId, String key);
 }

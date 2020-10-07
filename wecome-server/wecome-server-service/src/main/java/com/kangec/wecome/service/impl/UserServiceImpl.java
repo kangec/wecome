@@ -11,8 +11,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import packet.chat.ChatDialogRequest;
 import packet.chat.dto.ChatItemDTO;
-import packet.login.dto.ContactItemDTO;
-import packet.login.dto.GroupItemDTO;
+import packet.contact.dto.ContactItemDTO;
+import packet.contact.dto.GroupItemDTO;
+import packet.contact.dto.SearchResultDTO;
 import packet.message.MessageRequest;
 import packet.message.dto.MessagePaneDTO;
 import utils.StatusCode;
@@ -134,6 +135,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long getChatList(String userId, String contactId) {
         return chatsMapper.queryChatsByUserIdWithChatId(userId, contactId);
+    }
+
+    @Override
+    public List<SearchResultDTO> searchContacts(String userId, String key) {
+        List<SearchResultDTO> res = new ArrayList<>();
+        key = "%" + key + "%";
+        List<User> usersAll = userMapper.queryUserContacts(userId, key);
+        List<String> addedIds = contactsMapper.queryContactsIdByUserId(userId);
+        usersAll.forEach(user -> {
+            int status = 0;
+            if (addedIds.contains(user.getUserId())) {
+                status = 2;
+            }
+            SearchResultDTO dto = SearchResultDTO.builder().contactId(user.getUserId())
+                    .contactAvatar(user.getAvatar())
+                    .contactName(user.getNickName())
+                    .status(status)
+                    .build();
+            res.add(dto);
+        });
+        return res;
     }
 
     private void deleteChatDialog(ChatDialogRequest msg) {

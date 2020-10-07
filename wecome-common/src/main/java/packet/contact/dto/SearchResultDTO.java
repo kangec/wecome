@@ -19,5 +19,5 @@ public class SearchResultDTO implements Serializable {
     private String contactId;       // 联系人标识
     private String contactName;     // 昵称
     private String contactAvatar;   // 头像
-    private Integer status;
+    private Integer status;         // 状态；0添加、1[保留]、2已添加
 }
