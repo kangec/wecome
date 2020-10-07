@@ -6,6 +6,7 @@ import com.kangec.client.service.UIService;
 import com.kangec.client.socket.handler.ChatDialogHandler;
 import com.kangec.client.socket.handler.LoginHandler;
 import com.kangec.client.socket.handler.MessageHandler;
+import com.kangec.client.socket.handler.SearchContactHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -31,7 +32,11 @@ public class ClientChannelInit extends ChannelInitializer<SocketChannel> {
         pipeline.addLast("loginHandler", new LoginHandler(uiService.getLoginView()));
 
         pipeline.addLast("chatDialogHandler", new ChatDialogHandler(uiService));
+
         pipeline.addLast("messageHandler", new MessageHandler(uiService));
+
+        pipeline.addLast("SearchContactHandler", new SearchContactHandler(uiService));
+
         pipeline.addLast(new ObjEncoder());
     }
 }

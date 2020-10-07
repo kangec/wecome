@@ -7,6 +7,7 @@ import domain.MsgFlag;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import packet.chat.ChatDialogRequest;
+import packet.contact.SearchContactRequest;
 import packet.message.MessageRequest;
 import utils.StatusCode;
 
@@ -73,6 +74,12 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void doContactSearch(String userId, String text) {
         log.info("搜索好友:{}", text);
+        SearchContactRequest request = SearchContactRequest.builder()
+                .userId(userId)
+                .key(text)
+                .build();
+        Channel channel = Beans.getBean(Beans.CLIENT_CHANNEL, Channel.class);
+        channel.writeAndFlush(request);
     }
 
     @Override

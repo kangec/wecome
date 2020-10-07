@@ -1,17 +1,14 @@
 package com.kangec.client.socket.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.kangec.client.cache.Beans;
 
 import com.kangec.client.view.contract.LoginContract;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
-import packet.login.LoginRequest;
 import packet.login.LoginResponse;
-import packet.login.dto.ContactItemDTO;
+import packet.contact.dto.ContactItemDTO;
 
 import java.util.List;
 

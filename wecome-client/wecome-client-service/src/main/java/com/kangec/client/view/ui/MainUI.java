@@ -20,8 +20,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import packet.login.LoginResponse;
 import packet.chat.dto.ChatItemDTO;
-import packet.login.dto.ContactItemDTO;
-import packet.login.dto.GroupItemDTO;
+import packet.contact.dto.ContactItemDTO;
+import packet.contact.dto.GroupItemDTO;
 import packet.message.dto.MessagePaneDTO;
 
 import java.io.IOException;
