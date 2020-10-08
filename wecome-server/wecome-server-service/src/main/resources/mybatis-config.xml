@@ -17,5 +17,6 @@
         <typeAlias type="com.kangec.wecome.infrastructure.pojo.Groups" alias="Groups"/>
         <typeAlias type="com.kangec.wecome.infrastructure.pojo.Message" alias="Message"/>
         <typeAlias type="com.kangec.wecome.infrastructure.pojo.Contacts" alias="Contacts"/>
+        <typeAlias type="com.kangec.wecome.infrastructure.pojo.SysUser" alias="Admin"/>
     </typeAliases>
 </configuration>
