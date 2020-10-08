@@ -3,6 +3,8 @@ package packet;
 
 import packet.chat.ChatDialogRequest;
 import packet.chat.ChatDialogResponse;
+import packet.contact.AddContactRequest;
+import packet.contact.AddContactResponse;
 import packet.contact.SearchContactRequest;
 import packet.contact.SearchContactResponse;
 import packet.login.LoginRequest;
@@ -37,6 +39,8 @@ public abstract class Packet {
         packets.put(Command.CHAT_DIALOG_REQUEST_RESPONSE, ChatDialogResponse.class);
         packets.put(Command.SEARCH_CONTACT_REQUEST, SearchContactRequest.class);
         packets.put(Command.SEARCH_CONTACT_RESPONSE, SearchContactResponse.class);
+        packets.put(Command.ADD_CONTACT_REQUEST, AddContactRequest.class);
+        packets.put(Command.ADD_CONTACT_RESPONSE, AddContactResponse.class);
     }
 
     /**
@@ -45,6 +49,8 @@ public abstract class Packet {
      * @return extends {@link Packet} Packet
      */
     public static Class<? extends Packet> get(Byte command) {
+        if (!packets.containsKey(command))
+            throw new RuntimeException("找不到协议，代号：" + command);
         return packets.get(command);
     }
 
