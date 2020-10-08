@@ -18,7 +18,7 @@
     <select id="queryUserContacts" resultType="User">
         SELECT *
         FROM USER
-        WHERE (nick_name LIKE #{key} OR user_id LIKE #{key});
+        WHERE user_id != #{userId} and (nick_name LIKE #{key} OR user_id LIKE #{key});
     </select>
 
     <select id="selectUsers" resultType="User">

@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class WeComeServerApplication extends SpringBootServletInitializer implements CommandLineRunner {
 
-    @Autowired
     private WeComeServer weComeServer;
 
     public static void main(String[] args) {
@@ -37,5 +36,10 @@ public class WeComeServerApplication extends SpringBootServletInitializer implem
             Thread.sleep(1000);
         }
         log.info("WeCome Netty Server 启动成功 {}",channel.localAddress());
+    }
+
+    @Autowired
+    public void setWeComeServer(WeComeServer weComeServer) {
+        this.weComeServer = weComeServer;
     }
 }

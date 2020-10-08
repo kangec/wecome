@@ -3,10 +3,7 @@ package com.kangec.wecome.socket;
 import codec.ObjDecoder;
 import codec.ObjEncoder;
 import com.kangec.wecome.service.UserService;
-import com.kangec.wecome.socket.hander.ChatHandler;
-import com.kangec.wecome.socket.hander.LoginHandler;
-import com.kangec.wecome.socket.hander.MessageHandler;
-import com.kangec.wecome.socket.hander.SearchContactHandler;
+import com.kangec.wecome.socket.hander.*;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -37,6 +34,8 @@ public class WeComeChannelInitializer extends ChannelInitializer<SocketChannel> 
         pipeline.addLast(new MessageHandler(userService));
 
         pipeline.addLast(new SearchContactHandler(userService));
+
+        pipeline.addLast(new AddContactHandler(userService));
 
         pipeline.addLast(new ObjEncoder());
     }

@@ -1,16 +1,14 @@
 package com.kangec.wecome.service.impl;
 
 import com.kangec.wecome.infrastructure.mapper.*;
-import com.kangec.wecome.infrastructure.pojo.Chat;
-import com.kangec.wecome.infrastructure.pojo.Groups;
-import com.kangec.wecome.infrastructure.pojo.Message;
-import com.kangec.wecome.infrastructure.pojo.User;
+import com.kangec.wecome.infrastructure.pojo.*;
 import com.kangec.wecome.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import packet.chat.ChatDialogRequest;
 import packet.chat.dto.ChatItemDTO;
+import packet.contact.AddContactRequest;
 import packet.contact.dto.ContactItemDTO;
 import packet.contact.dto.GroupItemDTO;
 import packet.contact.dto.SearchResultDTO;
@@ -156,6 +154,34 @@ public class UserServiceImpl implements UserService {
             res.add(dto);
         });
         return res;
+    }
+
+    @Override
+    public void asyncAddContact(AddContactRequest msg) {
+        executor.execute(() -> {
+            Date now = new Date();
+            String userId = msg.getUserId();
+            String contactId = msg.getContactId();
+            Contacts contactSelf = Contacts.builder()
+                                        .userId(userId)
+                                        .contactId(contactId)
+                                        .createTime(now)
+                                        .updateTime(now)
+                                        .build();
+
+            Contacts contact = Contacts.builder()
+                                    .userId(contactId)
+                                    .contactId(userId)
+                                    .createTime(now)
+                                    .updateTime(now)
+                                    .build();
+
+            // 向自己的通讯录插入对方的联系人信息
+            contactsMapper.insertContact(contactSelf);
+
+            // 向对方的通讯录插入自己的联系人信息
+            contactsMapper.insertContact(contact);
+        });
     }
 
     private void deleteChatDialog(ChatDialogRequest msg) {
