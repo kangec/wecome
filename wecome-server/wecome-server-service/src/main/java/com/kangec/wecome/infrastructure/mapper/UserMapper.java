@@ -40,7 +40,19 @@ public interface UserMapper {
      */
     List<User> queryUserContacts(@Param("userId") String userId,@Param("key") String key);
 
+    /**
+     * 添加用户
+     * @param user User
+     * @return 受影响行Id
+     */
     Long insertUser(User user);
 
     List<User> selectUsers(@Param("ids") List<String> ids);
+
+    /**
+     * 更新用户信息
+     * @param user User
+     * @return 受影响行id
+     */
+    Long update(User user);
 }
