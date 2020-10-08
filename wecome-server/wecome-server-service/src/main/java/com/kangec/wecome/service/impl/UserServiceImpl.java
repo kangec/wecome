@@ -181,6 +181,7 @@ public class UserServiceImpl implements UserService {
 
             // 向对方的通讯录插入自己的联系人信息
             contactsMapper.insertContact(contact);
+            now = null;
         });
     }
 

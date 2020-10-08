@@ -5,6 +5,7 @@ import com.kangec.client.socket.BaseHandler;
 import com.kangec.client.view.contract.MainContract;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import packet.chat.ChatDialogResponse;
 
@@ -25,11 +26,13 @@ public class ChatDialogHandler extends BaseHandler<ChatDialogResponse> {
     @Override
     public void channelRead(Channel ctx, ChatDialogResponse msg) {
         MainContract.View mainView = uiService.getMainView();
-        mainView.addTalkBox(-1,0
-                            ,msg.getContactId()
-                            ,msg.getContactName()
-                            ,msg.getAvatar()
-                            ,msg.getMsgBody()
-                            ,msg.getMsgDate(),false);
+        Platform.runLater(() -> {
+            mainView.addTalkBox(-1, 0
+                    , msg.getContactId()
+                    , msg.getContactName()
+                    , msg.getAvatar()
+                    , msg.getMsgBody()
+                    , msg.getMsgDate(), false);
+        });
     }
 }

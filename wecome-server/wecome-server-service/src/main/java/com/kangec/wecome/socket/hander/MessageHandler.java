@@ -7,7 +7,6 @@ import com.kangec.wecome.service.UserService;
 import com.kangec.wecome.socket.BaseHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import packet.chat.ChatDialogResponse;
 import packet.message.MessageRequest;
@@ -41,27 +40,28 @@ public class MessageHandler extends BaseHandler<MessageRequest> {
             return;
         }
         Long aLong = userService.getChatList(msg.getUserId(), msg.getContactId());
-        if (aLong == null) {
-            User user = userService.getUserInfo(msg.getUserId());
-            ChatDialogResponse response = ChatDialogResponse.builder()
-                    .contactId(msg.getUserId())
-                    .userId(msg.getContactId())
-                    .chatType(msg.getMsgType())
-                    .contactName(user.getNickName())
-                    .avatar(user.getAvatar())
-                    .msgBody(msg.getMsgBody())
-                    .msgDate(msg.getMsgDate())
-                    .isSuccess(true)
-                    .build();
-            contactChannel.writeAndFlush(response);
-        }
 
-        MessageResponse response = MessageResponse.builder()
+        User user = userService.getUserInfo(msg.getUserId());
+        // 发送消息之前要先发送对话框通知
+        ChatDialogResponse chatDialogResponse = ChatDialogResponse.builder()
+                .contactId(msg.getUserId())
+                .userId(msg.getContactId())
+                .chatType(msg.getMsgType())
+                .contactName(user.getNickName())
+                .avatar(user.getAvatar())
+                .msgBody(msg.getMsgBody())
+                .msgDate(msg.getMsgDate())
+                .isSuccess(true)
+                .build();
+        contactChannel.writeAndFlush(chatDialogResponse);
+
+
+        MessageResponse messageResponse = MessageResponse.builder()
                 .contactId(msg.getUserId())
                 .msgBody(msg.getMsgBody())
                 .msgDate(msg.getMsgDate())
                 .msgType(msg.getMsgType())
                 .build();
-        contactChannel.writeAndFlush(response);
+        contactChannel.writeAndFlush(messageResponse);
     }
 }
