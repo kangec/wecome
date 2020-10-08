@@ -7,6 +7,7 @@ import domain.MsgFlag;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import packet.chat.ChatDialogRequest;
+import packet.contact.AddContactRequest;
 import packet.contact.SearchContactRequest;
 import packet.message.MessageRequest;
 import utils.StatusCode;
@@ -112,6 +113,12 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void doEventAddContactUser(String userId, String contactId) {
         log.info("添加好友:{}", contactId);
+        AddContactRequest request = AddContactRequest.builder()
+                .userId(userId)
+                .contactId(contactId)
+                .build();
+        Channel channel = Beans.getBean(Beans.CLIENT_CHANNEL, Channel.class);
+        channel.writeAndFlush(request);
     }
 
     /**
@@ -120,5 +127,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void doQuitChat() {
         log.info("系统退出");
+        Channel channel = Beans.getBean(Beans.CLIENT_CHANNEL, Channel.class);
+        channel.close();
     }
 }
