@@ -16,5 +16,6 @@
         <typeAlias type="com.kangec.wecome.infrastructure.pojo.Chat" alias="Chat"/>
         <typeAlias type="com.kangec.wecome.infrastructure.pojo.Groups" alias="Groups"/>
         <typeAlias type="com.kangec.wecome.infrastructure.pojo.Message" alias="Message"/>
+        <typeAlias type="com.kangec.wecome.infrastructure.pojo.Contacts" alias="Contacts"/>
     </typeAliases>
 </configuration>

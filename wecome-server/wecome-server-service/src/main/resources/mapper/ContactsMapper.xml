@@ -4,6 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kangec.wecome.infrastructure.mapper.ContactsMapper">
     <select id="queryContactsIdByUserId" resultType="java.lang.String">
-        select contact_id from contacts where user_id = #{userId}
+        select contact_id
+        from contacts
+        where user_id = #{userId}
     </select>
+
+    <insert id="insertContact" parameterType="Contacts" keyProperty="id" useGeneratedKeys="true">
+        insert into contacts(user_id, contact_id, create_time, update_time)
+        VALUES (#{userId}, #{contactId}, #{createTime}, #{updateTime})
+    </insert>
 </mapper>
