@@ -267,8 +267,8 @@ public class UserServiceImpl implements UserService {
             // 群组
             if (chat.getChatType() == StatusCode.ChatType.GROUP.getValue()) {
                 Groups group = groupsMapper.queryGroupsById(chatId);
-                //messagePaneList = buildGroupMessagePaneList(messages);
                 if (group == null) return null;
+                messagePaneList = buildGroupMessagePaneList(messages, userId,group.getGroupId(), chatId);
                 chatItemDTO = ChatItemDTO.builder()
                         .chatType(1)
                         .chatId(group.getGroupId())
@@ -282,23 +282,41 @@ public class UserServiceImpl implements UserService {
         return chatItemDTO;
     }
 
-    private List<MessagePaneDTO> buildGroupMessagePaneList(List<Message> messages) {
+    /**
+     * 构建群组 groupId 内的历史消息列表
+     * @param messages  历史消息
+     * @param groupId   群组Id
+     * @param chatId    对话框Id
+     * @return          {@link MessagePaneDTO} 列表
+     */
+    private List<MessagePaneDTO> buildGroupMessagePaneList(List<Message> messages, String userId, String groupId, String chatId) {
         if (messages == null) return null;
-        return messages.stream()
-                .filter(message -> message.getChatType() != GROUP.getValue())
-                .map(message -> MessagePaneDTO.builder()
-                        .build()
-
-                ).collect(Collectors.toList());
+        List<MessagePaneDTO> list = new ArrayList<>();
+        messages.forEach(message -> {
+            if (message.getChatType() == GROUP.getValue()) {
+                boolean msgType = userId.equals(message.getUserId());
+                // TODO 信息构建
+                MessagePaneDTO item = MessagePaneDTO.builder()
+                        .msgPaneId(chatId)
+                        .userId(msgType ? userId : message.getContactId())
+                        .msgFlag(msgType ? 0 : 1)
+                        .msgBody(message.getBody())
+                        .msgDate(message.getMsgTime())
+                        .msgType(message.getChatType())
+                        .build();
+                list.add(item);
+            }
+        });
+        return list;
     }
 
     /**
      * 聊天记录数据传输列表
      *
-     * @param messages
-     * @param chatId
-     * @param userId
-     * @return
+     * @param messages 消息记录
+     * @param chatId 对话框Id
+     * @param userId 用户Id
+     * @return {@link MessagePaneDTO} 列表
      */
     private List<MessagePaneDTO> buildUserMessagePaneList(List<Message> messages, String userId, String chatId) {
         if (messages == null) return null;
@@ -318,21 +336,6 @@ public class UserServiceImpl implements UserService {
             }
         });
         return list;
-
-        /*return messages.stream()
-                .filter(message -> message.getChatType() != PERSONAL.getValue())
-                .map(message -> {
-                            boolean msgType = userId.equals(message.getUserId());
-                            return MessagePaneDTO.builder()
-                                    .msgPaneId(chatId)
-                                    .userId(msgType ? userId : message.getContactId())
-                                    .msgType(msgType ? 0 : 1)
-                                    .msgBody(message.getBody())
-                                    .msgDate(message.getMsgTime())
-                                    .msgFlag(message.getChatType())
-                                    .build();
-                        }
-                ).collect(Collectors.toList());*/
     }
 
 

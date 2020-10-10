@@ -40,6 +40,8 @@ public class WeComeClientApplication extends Application{
         log.info("NettyClient连接服务完成 {}", channel.localAddress());
     }
 
+    // 断线重连
+
 
     public static void main(String[] args) {
         launch(args);

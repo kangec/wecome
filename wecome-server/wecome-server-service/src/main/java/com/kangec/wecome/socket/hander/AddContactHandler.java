@@ -48,6 +48,7 @@ public class AddContactHandler extends BaseHandler<AddContactRequest> {
                 .nickName(contact.getNickName())
                 .avatar(contact.getAvatar())
                 .build();
+        log.info("添加联系人响应： {}", JSON.toJSONString(contactResponse));
         ctx.writeAndFlush(contactResponse);
     }
 }
