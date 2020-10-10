@@ -17,4 +17,5 @@ public interface AdminService {
     public SysUser getSysUserInformation(String id);
     public SysRole getSysRole(Integer id);
     public List<SysUserRole> getSysUserRoleList(Integer userId);
+    public Integer getOnlineUsers();
 }

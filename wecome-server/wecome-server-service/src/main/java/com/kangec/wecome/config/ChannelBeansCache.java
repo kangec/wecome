@@ -29,6 +29,14 @@ public class ChannelBeansCache {
     }
 
     /**
+     * 获取在线人数
+     * @return 在线人数
+     */
+    public static Integer getUserChannelSize() {
+        return userChannels.size();
+    }
+
+    /**
      * 添加群组成员列表通信管道
      *
      * @param userId      对话框ID[群号]

@@ -2,6 +2,7 @@ package com.kangec.wecome.admin.service.impl;
 
 
 import com.kangec.wecome.admin.service.AdminService;
+import com.kangec.wecome.config.ChannelBeansCache;
 import com.kangec.wecome.infrastructure.mapper.SysRoleMapper;
 import com.kangec.wecome.infrastructure.mapper.SysUserMapper;
 import com.kangec.wecome.infrastructure.mapper.SysUserRoleMapper;
@@ -44,6 +45,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<SysUserRole> getSysUserRoleList(Integer userId) {
         return sysUserRoleMapper.listByUserId(userId);
+    }
+
+    @Override
+    public Integer getOnlineUsers() {
+        return ChannelBeansCache.getUserChannelSize() - 1;
     }
 
     @Autowired
