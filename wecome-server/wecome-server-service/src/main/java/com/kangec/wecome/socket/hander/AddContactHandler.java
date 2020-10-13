@@ -1,7 +1,7 @@
 package com.kangec.wecome.socket.hander;
 
 import com.alibaba.fastjson.JSON;
-import com.kangec.wecome.config.ChannelBeansCache;
+import com.kangec.wecome.config.ConnectionManager;
 import com.kangec.wecome.infrastructure.pojo.User;
 import com.kangec.wecome.service.UserService;
 import com.kangec.wecome.socket.BaseHandler;
@@ -30,7 +30,7 @@ public class AddContactHandler extends BaseHandler<AddContactRequest> {
     public void channelRead(Channel ctx, AddContactRequest msg) {
         log.info("添加联系人请求： {}", JSON.toJSONString(msg));
         userService.asyncAddContact(msg);
-        Channel contactChannel = ChannelBeansCache.get(msg.getContactId());
+        Channel contactChannel = ConnectionManager.get(msg.getContactId());
         User user = userService.getUserInfo(msg.getUserId());
         User contact = userService.getUserInfo(msg.getContactId());
         //对方在线则更新对方的联系人列表

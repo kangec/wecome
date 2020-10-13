@@ -1,7 +1,7 @@
 package com.kangec.wecome.socket.hander;
 
 import com.alibaba.fastjson.JSON;
-import com.kangec.wecome.config.ChannelBeansCache;
+import com.kangec.wecome.config.ConnectionManager;
 import com.kangec.wecome.infrastructure.pojo.User;
 import com.kangec.wecome.service.UserService;
 import com.kangec.wecome.socket.BaseHandler;
@@ -47,11 +47,11 @@ public class LoginHandler extends BaseHandler<LoginRequest> {
         /* 登录成功后，需要完成：给客户端反馈用户信息、用户对话框列表、通讯录列表、群组列表 */
 
         // 将 userId 绑定 Channel，发送消息时将通过此拿到传输消息的 Channel
-        ChannelBeansCache.put(userId,ctx);
+        ConnectionManager.put(userId,ctx);
 
         // 将 GroupId 与 Channel 绑定，用于收发消息。
         List<String> groupIds = userService.getGroupIds(userId);
-        groupIds.forEach(groupId -> ChannelBeansCache.putGroups(groupId, ctx));
+        groupIds.forEach(groupId -> ConnectionManager.putGroups(groupId, ctx));
 
         // 1. 获取反馈用户信息
         User user = userService.getUserInfo(userId);

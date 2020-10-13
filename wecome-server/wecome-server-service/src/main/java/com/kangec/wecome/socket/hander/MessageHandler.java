@@ -1,7 +1,7 @@
 package com.kangec.wecome.socket.hander;
 
 import com.alibaba.fastjson.JSON;
-import com.kangec.wecome.config.ChannelBeansCache;
+import com.kangec.wecome.config.ConnectionManager;
 import com.kangec.wecome.infrastructure.pojo.User;
 import com.kangec.wecome.service.UserService;
 import com.kangec.wecome.socket.BaseHandler;
@@ -33,7 +33,7 @@ public class MessageHandler extends BaseHandler<MessageRequest> {
         //数据插入数据库
         userService.asyncAddMessageRecord(msg);
 
-        Channel contactChannel = ChannelBeansCache.get(msg.getContactId());
+        Channel contactChannel = ConnectionManager.get(msg.getContactId());
         if (contactChannel == null) {
             log.info("用户ID：{} 未登录。", msg.getContactId());
             // 缓存到消息队列，等待用户上线

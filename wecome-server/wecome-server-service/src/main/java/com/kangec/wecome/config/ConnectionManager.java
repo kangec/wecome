@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  **/
 
-public class ChannelBeansCache {
+public class ConnectionManager {
 
     private static final Map<String, Channel> userChannels = new ConcurrentHashMap<>();
     private static final Map<String, String> userChannelIds = new ConcurrentHashMap<>();
