@@ -3,6 +3,7 @@ package com.kangec.wecome.admin.service;
 import com.kangec.wecome.infrastructure.pojo.SysRole;
 import com.kangec.wecome.infrastructure.pojo.SysUser;
 import com.kangec.wecome.infrastructure.pojo.SysUserRole;
+import com.kangec.wecome.infrastructure.pojo.User;
 
 import java.util.List;
 

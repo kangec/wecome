@@ -92,4 +92,6 @@ public interface UserService {
      * @param msg 添加联系人请求
      */
     void asyncAddContact(AddContactRequest msg);
+
+    public User doRegister(User user);
 }

@@ -9,9 +9,11 @@ import com.kangec.wecome.infrastructure.mapper.SysUserRoleMapper;
 import com.kangec.wecome.infrastructure.pojo.SysRole;
 import com.kangec.wecome.infrastructure.pojo.SysUser;
 import com.kangec.wecome.infrastructure.pojo.SysUserRole;
+import com.kangec.wecome.infrastructure.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**

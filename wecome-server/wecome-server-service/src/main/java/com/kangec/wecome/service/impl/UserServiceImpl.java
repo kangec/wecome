@@ -19,7 +19,6 @@ import utils.StatusCode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static utils.StatusCode.ChatType.GROUP;
 import static utils.StatusCode.ChatType.PERSONAL;
@@ -183,6 +182,19 @@ public class UserServiceImpl implements UserService {
             contactsMapper.insertContact(contact);
             now = null;
         });
+    }
+
+    @Override
+    public User doRegister(User user) {
+        Date now = new Date();
+        long millis = System.currentTimeMillis();
+        user.setCreateTime(now);
+        user.setUpdateTime(now);
+        // TODO
+        String userId = Long.toString(millis).substring(5, 15);
+        user.setUserId(userId);
+        Long aLong = userMapper.insertUser(user);
+        return aLong > 0 ? user : null;
     }
 
     private void deleteChatDialog(ChatDialogRequest msg) {

@@ -300,11 +300,11 @@
                     <i style="right: 5px">in</i>
                 </div>
                 <span>
-                    <form action="/doRegister" method="post">
+                    <form th:action="@{/doRegister}" method="post">
                         <p class="form"><input type="text" name="username" id="user" placeholder="username"></p>
                         <p class="form"><input type="password" name="password" id="passwd" placeholder="password"></p>
                         <p class="form"><input type="password" id="confirm-passwd" placeholder="confirm password"></p>
-                        <input type="button" value="Sign in" class="btn" onclick='signin()' id="btn">
+                        <input type="submit" value="Sign in" class="btn" id="btn">
                     </form>
                 </span>
             </div>
@@ -357,9 +357,9 @@
     }
     //回调函数
     function submit(callback) {
-        //if (passwd.value == con_pass.value) {
+        if (passwd.value == con_pass.value) {
         let request = new XMLHttpRequest()
-        let url = ""
+        let url = "/*[[doRegister]]*/"
         request.open("post", url, true)
         let data = new FormData()
         data.append("user", user.value)
@@ -372,17 +372,16 @@
         }
         request.send(data)
     }
-    /*else {
+    else {
                hit.innerHTML = "两次密码不同"
                hitting()
            }
-       }*/
+       }
     //注册按钮
     function signin() {
         let status = document.getElementById("status").getElementsByTagName("i")
         let hit = document.getElementById("hint").getElementsByTagName("p")[0]
         if (onoff) {
-            confirm.style.height = 51 + "px"
             status[0].style.top = 35 + "px"
             status[1].style.top = 0
             onoff = !onoff
