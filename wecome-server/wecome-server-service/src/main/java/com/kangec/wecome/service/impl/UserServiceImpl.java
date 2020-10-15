@@ -19,6 +19,7 @@ import utils.StatusCode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static utils.StatusCode.ChatType.GROUP;
 import static utils.StatusCode.ChatType.PERSONAL;
@@ -187,11 +188,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User doRegister(User user) {
         Date now = new Date();
-        long millis = System.currentTimeMillis();
         user.setCreateTime(now);
         user.setUpdateTime(now);
+        user.setAvatar("16");
         // TODO
-        String userId = Long.toString(millis).substring(5, 15);
+        String userId = UUID.randomUUID().toString().substring(1,5);
         user.setUserId(userId);
         Long aLong = userMapper.insertUser(user);
         return aLong > 0 ? user : null;
