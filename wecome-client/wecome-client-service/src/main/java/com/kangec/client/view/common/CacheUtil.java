@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CacheUtil {
-
+    public static String userId;
     // 对话框组
     public static Map<String, ChatContactPane> talkMap = new ConcurrentHashMap<>();
 

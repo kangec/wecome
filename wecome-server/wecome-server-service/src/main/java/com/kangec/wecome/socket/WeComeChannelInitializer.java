@@ -37,6 +37,8 @@ public class WeComeChannelInitializer extends ChannelInitializer<SocketChannel> 
 
         pipeline.addLast(new AddContactHandler(userService));
 
+        pipeline.addLast(new ReconnectHandler(userService));
+
         pipeline.addLast(new ObjEncoder());
     }
 }

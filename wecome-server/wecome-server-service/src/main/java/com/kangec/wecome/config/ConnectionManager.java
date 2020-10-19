@@ -28,6 +28,10 @@ public class ConnectionManager {
         userChannelIds.put(channel.id().toString(), userId);
     }
 
+    public static void removeUserChannelByUserId(String userId){
+        userChannels.remove(userId);
+    }
+
     /**
      * 获取在线人数
      * @return 在线人数

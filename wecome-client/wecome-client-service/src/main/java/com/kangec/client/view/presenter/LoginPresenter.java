@@ -1,6 +1,7 @@
 package com.kangec.client.view.presenter;
 
 import com.kangec.client.cache.Beans;
+import com.kangec.client.view.common.CacheUtil;
 import com.kangec.client.view.common.StringUtils;
 import com.kangec.client.view.contract.LoginContract;
 import io.netty.channel.Channel;
@@ -49,6 +50,7 @@ public class LoginPresenter implements LoginContract.Presenter {
     private void doLogin(String username, String password) {
         Channel channel = Beans.getBean(Beans.CLIENT_CHANNEL, Channel.class);
         LoginRequest loginRequest = new LoginRequest(username,password);
+        CacheUtil.userId = username;
         channel.writeAndFlush(loginRequest);
     }
 }
