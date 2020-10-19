@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @Version 1.0
  **/
 public class WeComeChannelInitializer extends ChannelInitializer<SocketChannel> {
-    private UserService userService;
+    private final UserService userService;
 
     public WeComeChannelInitializer(UserService userService) {
         this.userService = userService;

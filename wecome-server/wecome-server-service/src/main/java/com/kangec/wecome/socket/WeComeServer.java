@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PreDestroy;
 import java.util.concurrent.Callable;
 
 @Service
@@ -53,6 +54,7 @@ public class WeComeServer implements Callable<Channel> {
     }
 
     // 资源释放
+    @PreDestroy
     public void destroy() {
         if (channel == null) return;
         channel.close();

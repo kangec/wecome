@@ -1,6 +1,8 @@
 package packet;
 
 /**
+ * 指令集
+ *
  * @Author Ardien
  * @Date 9/29/2020 9:01 PM
  * @Email ardien@126.com
@@ -17,4 +19,5 @@ public final class Command {
     public final static Byte SEARCH_CONTACT_RESPONSE = 107;
     public final static Byte ADD_CONTACT_REQUEST = 108;
     public final static Byte ADD_CONTACT_RESPONSE = 109;
+    public final static Byte RECONNECT_REQUEST = 110;
 }
