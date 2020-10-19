@@ -1,6 +1,7 @@
 package com.kangec.wecome.admin.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.kangec.wecome.infrastructure.pojo.Result;
 import com.kangec.wecome.infrastructure.pojo.User;
 import com.kangec.wecome.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,14 +33,16 @@ public class RegisterController {
 
     @PostMapping(value = "/doRegister")
     @ResponseBody
-    public Map<String, String> doRegister(@RequestBody User user) {
-        Map<String, String> mv = new HashMap<>();
+    public Map<String, Result> doRegister(@RequestBody User user) {
+        log.info(JSON.toJSONString(user));
+        Map<String, Result> mv = new HashMap<>();
         User result = userService.doRegister(user);
+        Result res =  Result.builder().build();
         if (result != null) {
-            mv.put("result", "true");
-            mv.put("userId", user.getUserId());
-        }else
-            mv.put("result", "false");
+            res.setResult(true);
+            res.setUserId(result.getUserId());
+            mv.put("res", res);
+        }
         return mv;
     }
 }

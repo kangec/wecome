@@ -191,12 +191,12 @@ public class UserServiceImpl implements UserService {
         user.setCreateTime(now);
         user.setUpdateTime(now);
         user.setAvatar("16");
-        // TODO
-        String userId = UUID.randomUUID().toString().substring(1,5);
+        String userId = String.valueOf(System.currentTimeMillis() % 100000000);
         user.setUserId(userId);
         Long aLong = userMapper.insertUser(user);
         return aLong > 0 ? user : null;
     }
+
 
     private void deleteChatDialog(ChatDialogRequest msg) {
         chatsMapper.delete(msg.getUserId(), msg.getContactId());
